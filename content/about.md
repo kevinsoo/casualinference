@@ -10,4 +10,4 @@ I recently completed a PhD in cognitive psychology at the University of Pittsbur
 This blog is where I write about my side-projects, which provide me opportunities to learn new methods and dive into topics that interest me. I may occasionally write about other non-data-related things, too. Some inferences may be causal; almost all will be casual.
 
 ![](/./about_files/likethedickens.jpg)
-<sub><sup>Me attempting Like the Dickens (V7) @ Coll's Cove in PA, Spring 2019. If I'm not blogging in my spare time, I'm probably doing more of this.</sup></sub>
+<sub><sup>Me attempting Like the Dickens (V7) @ Coll's Cove in PA, Spring 2019. If I'm not working on problems related to data science in my spare time, I'm probably working on these types of problems.</sup></sub>
