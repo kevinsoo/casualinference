@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Movies on Casual Inference</title>
+    <link>/tags/movies/</link>
+    <description>Recent content in Movies on Casual Inference</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Apr 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/movies/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Avengers popularity contest</title>
+      <link>/2019/04/25/avengers-popularity-contest/</link>
+      <pubDate>Thu, 25 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/04/25/avengers-popularity-contest/</guid>
+      <description>I&amp;rsquo;m catching Avengers: Endgame later today, early enough that I don&amp;rsquo;t have to hide from spoilers. The closing of this phase of the Marvel Cinematic Universe completes the current storylines, but really the movies will continue unabated as long as Disney makes money off of them.
+As someone who grew up following the Avengers in comic books, and then seeing them come to life on the screen, the ending of this phase is also emotionally significant.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.54.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Avengers popularity contest &middot; Casual Inference</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  
+  <link rel="icons8-scatter-plot-90" sizes="144x144" href="/icons8-scatter-plot-90.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Casual Inference" />
+
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>Casual Inference</h1></a>
+      <p class="lead">
+      Adventures of a Data Scientist <a href="http://twitter.com/civisanalytics">@CivisAnalytics</a>. Occasional causal inferences.
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/categories/"> Categories </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+    </nav>
+    
+    <div>
+        <h3 class="white">Links</h3>
+        <i class="fab fa-twitter fa-fw"></i> <a href="http://twitter.com/kevinwxsoo">Twitter</a><br>
+        <i class="fab fa-github fa-fw"></i> <a href="https://github.com/kevinsoo">GitHub</a><br>
+        <i class="far fa-envelope fa-fw"></i> <a href="mailto:kevinsoo87@gmail.com?Subject=Hello">Email</a><br>
+        <br>
+    </div>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Avengers popularity contest</h1>
+  <time datetime=2019-04-25T00:00:00Z class="post-date">Thu, Apr 25, 2019</time>
+  
+
+
+<p>I’m catching <em>Avengers: Endgame</em> later today, early enough that I don’t have to hide from spoilers. The closing of this phase of the Marvel Cinematic Universe (MCU) completes the current storylines, but really the movies will continue unabated as long as Disney makes money off of them.</p>
+<p><img src="/post/2019-04-25-avengers-popularity-contest_files/avengers.jpg" alt="The Avengers powered by the Money Stone." /> <sub><sup>The Avengers, seen here powered by the <a href="https://www.theringer.com/movies/2019/4/22/18510211/avengers-endgame-thanos-infinity-stones-guide">Money Stone</a>.</sup></sub></p>
+<p>As someone who grew up following the Avengers in comic books, and then seeing them come to life on the screen, the ending of this phase is also emotionally significant. To commemorate it, I wanted to quickly visualize the popularity of the different Avengers, based on <a href="https://fivethirtyeight.com/features/avengers-death-comics-age-of-ultron/">this dataset</a> of their appearances in the comic books (up to April 2015) compiled by FiveThirtyEight, and <a href="https://www.imdb.com/list/ls066620113/">this dataset</a> of their time on-screen in the movies.</p>
+<div id="comic-book-popularity" class="section level2">
+<h2>Comic book popularity</h2>
+<p>Starting with the source material, the following figure plots all individuals who have been a part of the Avengers at some point in a comic book issue. The Avengers are not an exclusive group in the comics, with tons of characters having short stints as members (sometimes, they’re “honorary” members like <a href="http://marvel.wikia.com/Eugene_Thompson_(Earth-616)#">Flash Thompson</a> – yes, Peter Parker’s bully/frenemy).</p>
+<p>I’ve labeled all characters who went on to play a significant part in any of the MCU movies: <a href="https://www.imdb.com/title/tt0848228/?ref_=ttls_li_tt"><em>The Avengers</em></a> (2012), <a href="https://www.imdb.com/title/tt2395427/?ref_=ttls_li_tt"><em>Avengers: Age of Ultron</em></a> (2015), and <a href="https://www.imdb.com/title/tt4154756/?ref_=ttls_li_tt"><em>Avengers: Infinity War</em></a> (2018).</p>
+<p><img src="/post/2019-04-25-avengers-popularity-contest_files/figure-html/comics-1.png" width="672" /></p>
+<p>The MCU movies featured Avengers who were relatively prominent in the comic books, plus a few others (Scott Lang is Ant-Man in the MCU movies, but Hank Pym has more appearances as Ant-Man in the comics). There are also a few prominent Avengers from the comics who didn’t feature in the movies, mainly due to copyright issues (e.g., <a href="https://wegotthiscovered.com/movies/fantastic-xmen-home-marvel-studios-week/">until recently</a>, Marvel Studios couldn’t use any of the X-Men of Fantastic Four).</p>
+</div>
+<div id="from-the-page-to-the-screen" class="section level2">
+<h2>From the page to the screen</h2>
+<p>Let’s focus on the Avengers who made it into the movies. Does prominence in the comics transfer to more screen time? In the following figure, I plotted their total screen-time vs. their comic book appearances. Generally, there’s a moderately strong relationship (partial-<em>R</em><sup>2</sup> = .34) – for each extra comic book appearance, each of these characters was featured an average of 0.65 seconds more on screen.</p>
+<p><img src="/post/2019-04-25-avengers-popularity-contest_files/figure-html/comicsVmovies-1.png" width="672" /></p>
+<p>The figure above also shows which Avengers are overrepresented on screen relative to their prominence in the comics. The main Avengers from 2012’s <em>The Avengers</em> (Iron Man, Captain America, Thor, Hulk, Black Widow, and Hawkeye) all appear to overperform on screen.</p>
+<p>In contrast, Spider-Man is a huge underperformer on screen. However, this may be due to him only appearing in one of the three movies. For a clearer picture, I used <code>gganimate</code> to create an animated version of the figure by movie.</p>
+<div class="figure">
+<img src="/post/2019-04-25-avengers-popularity-contest_files/animation1.gif" />
+
+</div>
+<p>From this, it appears only Iron Man consistently overperforms his comic book presence across all three movies. Many of the other Avengers show slight decreases in prominence across the movies, except Thor, who actually underperformed in the first two movies but significantly overperformed in <em>Infinity War</em>.</p>
+</div>
+<div id="there-goes-my-heroine-watch-her-as-she-goes" class="section level2">
+<h2>There goes my heroine, watch her as she goes</h2>
+<p>Marvel has a lot to say about the <a href="https://www.bustle.com/p/what-the-infinity-war-directors-have-to-say-about-the-future-of-women-in-the-mcu-9007732">diversity</a> of its cast, but movies based on comic books still tend to be <a href="https://www.vulture.com/2013/10/marvel-diversity-problem-avengers-shield-comics.html">male-dominated</a>.</p>
+<p>In the following figure, I plotted the comic book appearances of Avengers by gender. One obvious reason for the gender gap is the source material – there are significantly more male (<em>N</em> = 115) than female (<em>N</em> = 58) Avengers. On average, male Avengers are featured in an average of 490 issues each, while female Avengers are featured in 490 each.</p>
+<p><img src="/post/2019-04-25-avengers-popularity-contest_files/figure-html/gender-1.png" width="672" /></p>
+<p>The movies have not fixed this disparity. The Avengers movies feature 16% of the male Avengers from the comics, but only 5% of the female Avengers. Perhaps the introduction of Captain Marvel in <em>Endgame</em> will fix that a little, but remedying this will have to wait for Phase 2 of the MCU.</p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>That’s it, I’m off to the movies!</p>
+</div>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

@@ -1,0 +1,114 @@
+---
+title: Avengers popularity contest
+author: Kevin Soo
+date: '2019-04-25'
+slug: avengers-popularity-contest
+categories:
+  - R
+tags:
+  - pop culture
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load packages
+library(tidyverse)
+library(forcats)
+library(ggthemes)
+library(cowplot)
+library(ggrepel)
+library(gganimate)
+
+# Load data
+comics <- read_csv("files/avengers-popularity-contest/avengers_comics.csv")
+movies <- read_csv("files/avengers-popularity-contest/avengers_movies.csv")
+
+# Combine data
+df <- comics %>%
+    left_join(movies) %>%
+    mutate(movie = ifelse(is.na(Alias), "No", "Yes"))
+```
+
+I'm catching *Avengers: Endgame* later today, early enough that I don't have to hide from spoilers. The closing of this phase of the Marvel Cinematic Universe (MCU) completes the current storylines, but really the movies will continue unabated as long as Disney makes money off of them.
+
+![The Avengers powered by the Money Stone.](/post/2019-04-25-avengers-popularity-contest_files/avengers.jpg)
+<sub><sup>The Avengers, seen here powered by the [Money Stone](https://www.theringer.com/movies/2019/4/22/18510211/avengers-endgame-thanos-infinity-stones-guide).</sup></sub>
+
+As someone who grew up following the Avengers in comic books, and then seeing them come to life on the screen, the ending of this phase is also emotionally significant. To commemorate it, I wanted to quickly visualize the popularity of the different Avengers, based on [this dataset](https://fivethirtyeight.com/features/avengers-death-comics-age-of-ultron/) of their appearances in the comic books (up to April 2015) compiled by FiveThirtyEight, and [this dataset](https://www.imdb.com/list/ls066620113/) of their time on-screen in the movies.
+
+## Comic book popularity
+
+Starting with the source material, the following figure plots all individuals who have been a part of the Avengers at some point in a comic book issue. The Avengers are not an exclusive group in the comics, with tons of characters having short stints as members (sometimes, they're "honorary" members like [Flash Thompson](http://marvel.wikia.com/Eugene_Thompson_(Earth-616)#) -- yes, Peter Parker's bully/frenemy). 
+
+I've labeled all characters who went on to play a significant part in any of the MCU movies: [*The Avengers*](https://www.imdb.com/title/tt0848228/?ref_=ttls_li_tt) (2012), [*Avengers: Age of Ultron*](https://www.imdb.com/title/tt2395427/?ref_=ttls_li_tt) (2015), and [*Avengers: Infinity War*](https://www.imdb.com/title/tt4154756/?ref_=ttls_li_tt) (2018).
+
+```{r comics, warning=FALSE, echo=FALSE}
+df %>%
+    mutate(var = runif(173, 0, 2)) %>%
+    ggplot(aes(x = var, y = Appearances)) +
+    geom_point(alpha = .3, aes(color = movie)) +
+    geom_label_repel(aes(label = Alias), size = 2) +
+    scale_color_manual(values = c("black", "red")) +
+    scale_x_continuous(name = NULL, breaks = NULL) +
+    theme_minimal() +
+    theme(legend.position = "none") +
+    labs(title = "Comic book appearances by Avengers", subtitle = "Characters from MCU movies labeled")
+```
+
+The MCU movies featured Avengers who were relatively prominent in the comic books, plus a few others (Scott Lang is Ant-Man in the MCU movies, but Hank Pym has more appearances as Ant-Man in the comics). There are also a few prominent Avengers from the comics who didn't feature in the movies, mainly due to copyright issues (e.g., [until recently](https://wegotthiscovered.com/movies/fantastic-xmen-home-marvel-studios-week/), Marvel Studios couldn't use any of the X-Men of Fantastic Four).
+
+## From the page to the screen
+
+Let's focus on the Avengers who made it into the movies. Does prominence in the comics transfer to more screen time? In the following figure, I plotted their total screen-time vs. their comic book appearances. Generally, there's a moderately strong relationship (partial-*R*<sup>2</sup> = .34) -- for each extra comic book appearance, each of these characters was featured an average of 0.65 seconds more on screen.
+
+```{r comicsVmovies, warning=FALSE, echo=FALSE}
+df %>%
+    filter(movie == "Yes") %>%
+    mutate(ScreenTime = TheAvengers + AgeOfUltron + InfinityWar) %>%
+    ggplot(aes(x = Appearances, y = ScreenTime)) +
+    stat_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed", size = .5) +
+    geom_label_repel(aes(label = Alias), size = 2) +
+    theme_minimal() +
+    labs(title = "Relative prominence in comics vs. movies", 
+         subtitle = "Screen-time across first three Avengers movies", 
+         x = "Comic appearances", y = "Movie screen-time (seconds)")
+
+# Regression
+# model <- lm(data = df %>% 
+#                 filter(movie == "Yes") %>%
+#                 mutate(ScreenTime = TheAvengers + AgeOfUltron + InfinityWar), 
+#             ScreenTime ~ Appearances)
+```
+
+The figure above also shows which Avengers are overrepresented on screen relative to their prominence in the comics. The main Avengers from 2012's *The Avengers* (Iron Man, Captain America, Thor, Hulk, Black Widow, and Hawkeye) all appear to overperform on screen. 
+
+In contrast, Spider-Man is a huge underperformer on screen. However, this may be due to him only appearing in one of the three movies. For a clearer picture, I used `gganimate` to create an animated version of the figure by movie.
+
+```{r separateMovies, warning=FALSE, echo=FALSE}
+# gif <- df %>%
+#     filter(movie == "Yes") %>%
+#     gather(Movie, ScreenTime, TheAvengers:InfinityWar) %>%
+#     mutate(Movie = ifelse(Movie == "AgeOfUltron", "Age of Ultron (2015)",
+#                           ifelse(Movie == "InfinityWar", "Infinity War (2018)", "The Avengers (2012)")),
+#            Movie = factor(Movie, levels = c("The Avengers (2012)", "Age of Ultron (2015)", "Infinity War (2018)")),
+#            ScreenTime = ifelse(ScreenTime == 0, NA, ScreenTime)) %>%
+#     ggplot(aes(x = Appearances, y = ScreenTime)) +
+#     stat_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed", size = .5) +
+#     geom_label(aes(label = Alias), size = 2) +
+#     theme_minimal() +
+#     labs(title = "Relative prominence in comics vs. movies",
+#          subtitle = "Screen-time in {closest_state}",
+#          x = "Comic appearances", y = "Movie screen-time (seconds)") +
+#     transition_states(Movie, transition_length = .2, state_length = 1, wrap = FALSE) +
+#     enter_fade() +
+#     exit_shrink() +
+#     ease_aes('sine-in-out') +
+#     shadow_wake(wake_length = .01, wrap = FALSE)
+
+# animate(gif, height = 500, width = 672, res = 105)
+```
+
+![Avengers popularity across movies](/post/2019-04-25-avengers-popularity-contest_files/animation1.gif)
+
+From this, it appears only Iron Man consistently overperforms his comic book presence across all three movies. Many of the other Avengers show slight decreases in prominence across the movies, except Thor, who actually underperformed in the first two movies but significantly overperformed in *Infinity War*.
