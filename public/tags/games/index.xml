@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Pop Culture on Casual Inference</title>
-    <link>/tags/pop-culture/</link>
-    <description>Recent content in Pop Culture on Casual Inference</description>
+    <title>Games on Casual Inference</title>
+    <link>/tags/games/</link>
+    <description>Recent content in Games on Casual Inference</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 08 May 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/pop-culture/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/games/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,17 +19,6 @@
       <guid>/2019/05/08/choosing-board-games/</guid>
       <description>Board games have been a significant part of my life. Many of my closest friendships were forged through repeated gaming sessions. With my friends from high-school, I progressed from simple gateway games like Munchkin to more complex ones like Power Grid. I’m certainly not alone as a passenger on the board game train.
 What makes a good game, and relatedly, what should I play next? BoardGameGeek (BGG) is an online community that helps answer that question with reviews and discussions of almost anything that qualifies as a board/card game.</description>
-    </item>
-    
-    <item>
-      <title>Avengers popularity contest</title>
-      <link>/2019/04/25/avengers-popularity-contest/</link>
-      <pubDate>Thu, 25 Apr 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/04/25/avengers-popularity-contest/</guid>
-      <description>I’m catching Avengers: Endgame later today, early enough that I don’t have to hide from spoilers. The closing of this phase of the Marvel Cinematic Universe (MCU) completes the current storylines, but really the movies will continue unabated as long as Disney makes money off of them.
-The Avengers, seen here powered by the Money Stone.
-As someone who grew up following the Avengers in comic books, and then seeing them come to life on the screen, the ending of this phase is also emotionally significant.</description>
     </item>
     
   </channel>

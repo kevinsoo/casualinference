@@ -1,0 +1,69 @@
+---
+title: Choosing board games
+author: Kevin Soo
+date: '2019-05-08'
+slug: choosing-board-games
+categories:
+  - R
+tags:
+  - pop culture
+  - games
+---
+
+
+
+<p>Board games have been a significant part of my life. Many of my closest friendships were forged through repeated gaming sessions. With my friends from high-school, I progressed from simple gateway games like <a href="https://www.worldofmunchkin.com/game/"><em>Munchkin</em></a> to more complex ones like <a href="http://riograndegames.com/Game/5-Power-Grid"><em>Power Grid</em></a>. I’m certainly <a href="https://www.theguardian.com/lifeandstyle/2018/may/12/millennials-drive-board-games-revival">not alone</a> as a passenger on the board game train.</p>
+<p>What makes a good game, and relatedly, what should I play next? <a href="https://boardgamegeek.com/">BoardGameGeek</a> (BGG) is an online community that helps answer that question with reviews and discussions of almost anything that qualifies as a board/card game. This past week, I found a dataset of 4,999 BGG entries (up to January 2018) scraped by someone on <a href="https://www.kaggle.com/mrpantherson/board-game-data">Kaggle</a>.</p>
+<p>In the following analyses, I’ll look at a few factors that might be related to a game’s average BGG scores (called <a href="https://boardgamegeek.com/wiki/page/ratings">geek-ratings</a>), which range from 1 (awful) to 10 (outstanding).</p>
+<div id="games-over-time" class="section level2">
+<h2>Games over time</h2>
+<p>The following plot displays the ratings of games over time. Some games did not have specific release dates (e.g., <a href="https://en.wikipedia.org/wiki/Backgammon"><em>Backgammon</em></a> and <a href="https://en.wikipedia.org/wiki/Go_(game)"><em>Go</em></a>, so I visualized games starting from 1981 because that encompassed about 95% of the dataset.</p>
+<p><img src="/post/2019-05-08-choosing-board-games_files/figure-html/bgg-1.png" width="672" /></p>
+<p>Over time, more games have been released each year. Crucially, games have been getting slightly better on average over time (as can be seen from the positive slope of the regression line).</p>
+<p>I also visualized the number of ratings made on BGG for each game. There is a heavy skew in the number of ratings: most games have &lt; 10,000 ratings, but a handful have &gt; 70,000 ratings (<a href="https://www.catan.com/"><em>Catan</em></a> is the most popular game, with 77,423 ratings). Thus, I applied a <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4120293/">log-transformation</a> to the number of ratings.</p>
+<p>In general, games with better ratings tend to have more ratings – the correlation between number of ratings and the geek-rating for a game is moderately strong (<em>r</em> = .64) This is likely because good games attract more players, who then give more ratings (that tend to be favorable). Since BGG is a trusted source of information in the community, this leads to compounding popularity for the best and most prominent games.</p>
+</div>
+<div id="game-complexity" class="section level2">
+<h2>Game complexity</h2>
+<!-- Do ratings depend on the structural features of games? One factor that might be related to a game's rating is the average duration of a game. In the dataset, there is hardly any relationship between average duration and geek-ratings (*r* = -.01). However, in the following figure, plotting this relationship by the maximum number of players that each game can accomodate reveals a more subtle pattern. -->
+<!-- ```{r gamestructure, warning=FALSE, echo=FALSE} -->
+<!-- df %>% -->
+<!--     filter(max_players > 0, -->
+<!--            min_players > 0) %>% -->
+<!--     mutate(max_players = ifelse(max_players > 4, "> 4", max_players), -->
+<!--            max_players = factor(max_players, levels = c("1", "2", "3", "4", "> 4"))) %>% -->
+<!--     filter(avg_time <= 300, avg_time > 0) %>% -->
+<!--     ggplot(aes(x = avg_time, y = geek_rating, color = max_players)) + -->
+<!--     geom_jitter(alpha = .1, width = 2) + -->
+<!--     stat_smooth(method = "lm", aes(color = max_players), formula = "y ~ (x)") + -->
+<!--     scale_color_viridis_d() + -->
+<!--     scale_x_continuous(breaks = c(0, 60, 120, 180, 240, 300)) + -->
+<!--     theme_minimal() + -->
+<!--     labs(x = "Average duration (min)", y = "Rating", color = "Max players",  -->
+<!--          title = "Game ratings by duration and max players") -->
+<!-- ``` -->
+<!-- For games with only 1, 2, or 3 maximum players, there doesn't appear to be a relationship between the average duration of the game with its rating. In fact, for 2-player games, there is a negative relationship (if you're playing a game with only one other person, longer games can feel pretty exhausting). However, for games with a maximum of 4 or more players, there is a positive relationship. Games with more players are probably more sophisticated, and the games may possess enough complexity that longer games are actually better. -->
+<p>BGG provides a <a href="https://boardgamegeek.com/geeklist/200613/weight-depth-vs-complexity-results-and-analysis">weight</a> for each game to measure its complexity (higher weights = more complex games). The following plot reveals a modest positive relationship between these complexity weights and geek-ratings (<em>r</em> = .20). In addition, games with longer average durations also tend to have greater complexity.</p>
+<p><img src="/post/2019-05-08-choosing-board-games_files/figure-html/weights-1.png" width="672" /></p>
+</div>
+<div id="game-mechanisms" class="section level2">
+<h2>Game mechanisms</h2>
+<p>Each game utilizes a handful of mechanisms. There is an element of subjectivity to how the use of different mechanisms influences a game’s quality. For example, 116 games in the dataset use a <em>voting</em> mechanism, which I don’t particularly enjoy (because such games typically involve social persuasion: a key weakness of mine). On the other hand, my more charismatic and sociable friends tend to enjoy such games.</p>
+<p>There are 51 different mechanisms named across all games in the dataset. Some of these appear in only a handful of games (e.g., 3 games use the <em>singing</em> mechanic, but I’m not sure what that involves). For simplicity, I’ll focus on the 15 most common mechanisms. The following figure plots the use of each mechanism across all games by their ranking. There is technically no limit to the number of mechanisms each game can utilize.</p>
+<p><img src="/post/2019-05-08-choosing-board-games_files/figure-html/mechanic-1.png" width="672" /></p>
+<p>The plot is admittedly difficult to interpret visually. However, it does reveal that the most common mechanism of <em>dice rolling</em> is utilized pretty consistently by games of all ranks. <em>Hex-and-counter</em>, the 9<sup>th</sup> most common mechanism, actually tends to be missing from higher-ranked games, and is utilized more in games ranked ~2000 or worse. In contrast, <em>worker placement</em>, the 15<sup>th</sup> most common mechanism, is utilized more by higher-ranked games.</p>
+</div>
+<div id="modeling-good-games" class="section level2">
+<h2>Modeling good games</h2>
+<p>Putting together the insights from above, I built a regression model to see how well the different features predicted game ratings. I first split the overall dataset into a training set (<em>n</em> = 3999) and a testing set (<em>n</em> = 1000). Using the training set, I fitted a multiple regression model predicting game ratings from all the predictors. The following plot displays the coefficients of each predictor (with 95% confidence intervals).</p>
+<p><img src="/post/2019-05-08-choosing-board-games_files/figure-html/train-1.png" width="672" /></p>
+<p>The figure above shows the influence of each predictor while holding all other predictors constant. The # of ratings a game has is positively related to its rating. Because the scale of this predictor was vastly different from the others (ranging from 62 to 77,423), I standardized it – the coefficient (<em>B</em>) indicates that every increase of 1 standard deviation in the # of ratings corresponds to an expected increase of 0.285 in a game’s rating. The weight (i.e. complexity) of a game is also positively related to its rating. For every unit increase in complexity (e.g., comparing a game with weight = 2 vs. 3), the expected rating of the game rises by 0.122 points. Holding other predictors constant, there is no relationship between the release year and a game’s rating.</p>
+<p>The mechanisms are either “absent” or “present” in a game. The coefficients indicate the expected difference in a game’s rating when comparing a game without a particular mechanism vs. a game with that mechanism (holding other predictors constant). From the figure, most of the 15 most common mechanisms have a positive relationship with game ratings – <em>worker placement</em> and <em>card drafting</em> are particularly desirable. In contrast, the <em>hex-and-counter</em> mechanism is actually related to lower game ratings (<em>B</em> &lt; 0).</p>
+<p>This model accounted for 49.8% of the variation in game ratings. To validate the model, I used it to generate predictions for the testing set – based on the states of all the predictors for a particular game, I used the model to make a prediction of that game’s rating. This yields model predictions for the testing set that can be compared to the actual game ratings.</p>
+<p>The correlation between the model predictions and the actual game ratings in the test set was moderately strong (<em>r</em> = .71, equivalent to the model explaining ~ 50% of the variation in game ratings). This very simple model, which only makes use of 15 of the most common mechanisms, does decently well in showing us what makes a well-rated game.</p>
+</div>
+<div id="next-steps" class="section level2">
+<h2>Next steps</h2>
+<p>For simplicity, I left out many variables that could explain even more of the variation in game ratings. For example, the dataset contains information about game publishers and categories relating to the theme and style of the games (e.g., <em>medieval</em>, <em>space exploration</em>). In addition, a deeper investigation should involve combinations of mechanisms (e.g., <em>actions using points</em> may not be a positive feature on its own, but perhaps in combination with <em>worker placement</em> it makes for very well-rated games).</p>
+<p><em>This post is dedicated to the friends I learned to play Power Grid with all those years ago. Except the one who always intentionally blocked my path.</em></p>
+</div>
