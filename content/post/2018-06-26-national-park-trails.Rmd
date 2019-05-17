@@ -246,7 +246,7 @@ trails %>%
          y = "", x = "Time to hike (minutes)")
 ```
 
-Some parks have trails that are similarly difficult (e.g. most of Acadia's trails cana large proportion of trails that can be completed in between 1 and 2 hours), while others have a greater variety (e.g. in the Great Smoky Mountains, you can hop on a trail of almost any length). Having an idea of the time it takes to hike an average trail in a park can give you an idea of how many hikes you can feasibly fit into a trip.
+Some parks have trails that are similarly difficult (e.g. most of Acadia's trails can be completed in between 1 and 2 hours), while others have a greater variety (e.g. in the Great Smoky Mountains, you can hop on a trail of almost any length). Having an idea of the time it takes to hike an average trail in a park can give you an idea of how many hikes you can feasibly fit into a trip.
 
 ## Get outside
 
