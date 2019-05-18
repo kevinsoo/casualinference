@@ -11,4 +11,4 @@ Hello, I'm Kevin. I'm a soon-to-be Data Scientist at [Civis Analytics](https://c
 
 I completed a PhD in cognitive psychology at the University of Pittsburgh. I researched how people made inferences about cause-effect relationships, commonly referred to as causal reasoning (even more commonly mistaken for "casual" reasoning). You can read about my academic work [here](/academic/index.html).
 
-This blog is where I write about my side-projects, which provide me opportunities to learn new methods and dive into topics of interest. I may occasionally write about other non-data-related things, too. Some inferences may be causal; almost all will be casual.
+This blog is where I write about my side-projects, which I use to learn new methods and dive into topics that interest me. I may occasionally write about other non-data-related things, too. Some inferences may be causal; almost all will be casual.
