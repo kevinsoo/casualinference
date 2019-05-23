@@ -183,7 +183,7 @@ As mentioned above, the absence of a particular word doesn't imply that a partic
 
 2. **Each topic is written about using reliable collections of words.** When writing about a particular topic, a writer tends to use the same words. These words need not contain an explicit label for the topic (e.g., a topic about "sports" need not contain any names of sports; they could just contain verbs like "run", "kick", and "jump"). A topic is thus a cluster of co-occuring words that are linked by some underlying generative process -- a writer "generates" these words when communicating a particular topic.
 
-3. *Each article is about a combination of the topics in different proportions; we figure out the proportions from the words that are present.* Some articles are about a particular topic more than any other -- if so, we expect to see many words associated that topic, but few words associated with other topics. Some articles are about multiple topics, in which case we expect to see words associated with multiple topics.
+3. **Each article is about a combination of the topics in different proportions; we figure out the proportions from the words that are present.** Some articles are about a particular topic more than any other -- if so, we expect to see many words associated that topic, but few words associated with other topics. Some articles are about multiple topics, in which case we expect to see words associated with multiple topics.
 
 #### 3.1 Identifying the topics
 
