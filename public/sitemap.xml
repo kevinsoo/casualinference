@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/2019/05/27/passing-the-climbing-grade/</loc>
+    <lastmod>2019-05-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/2019/05/08/choosing-board-games/</loc>
     <lastmod>2019-05-08T00:00:00+00:00</lastmod>
   </url>
@@ -74,12 +79,18 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-05-08T00:00:00+00:00</lastmod>
+    <lastmod>2019-05-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/climbing/</loc>
+    <lastmod>2019-05-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -109,7 +120,7 @@
   
   <url>
     <loc>/tags/outdoors/</loc>
-    <lastmod>2018-06-26T00:00:00+00:00</lastmod>
+    <lastmod>2019-05-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -127,13 +138,13 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2019-05-08T00:00:00+00:00</lastmod>
+    <lastmod>2019-05-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/r/</loc>
-    <lastmod>2019-05-08T00:00:00+00:00</lastmod>
+    <lastmod>2019-05-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -145,13 +156,13 @@
   
   <url>
     <loc>/tags/sports/</loc>
-    <lastmod>2017-12-10T00:00:00+00:00</lastmod>
+    <lastmod>2019-05-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2019-05-08T00:00:00+00:00</lastmod>
+    <lastmod>2019-05-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

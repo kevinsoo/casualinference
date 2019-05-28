@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.54.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Passing the (climbing) grade &middot; Casual Inference</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  
+  <link rel="icons8-scatter-plot-90" sizes="144x144" href="/icons8-scatter-plot-90.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Casual Inference" />
+
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>Casual Inference</h1></a>
+      <p class="lead">
+      Adventures of a Data Scientist <a href="http://twitter.com/civisanalytics">@CivisAnalytics</a><br>Occasional causal inferences
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/categories/"> Categories </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+    </nav>
+    
+    <div>
+        <h3 class="white">Links</h3>
+        <i class="fab fa-twitter fa-fw"></i> <a href="http://twitter.com/kevinwxsoo">Twitter</a><br>
+        <i class="fab fa-github fa-fw"></i> <a href="https://github.com/kevinsoo">GitHub</a><br>
+        <i class="far fa-envelope fa-fw"></i> <a href="mailto:kevinwxsoo@gmail.com?Subject=Hello">Email</a><br>
+        <br>
+    </div>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Passing the (climbing) grade</h1>
+  <time datetime=2019-05-27T00:00:00Z class="post-date">Mon, May 27, 2019</time>
+  
+
+
+<p>This past weekend, I had the chance to climb at the <a href="https://www.mountainproject.com/area/105855991/the-new-river-gorge">New River Gorge</a>, one of the best climbing destinations on the East coast (and probably the closest world-class crag to where I live). Unfortunately, I’m rehabbing a wrist injury, so the hardest climb I got on was graded 5.9, several notches below the level I’m trying to climb at consistently. Fortunately, it was the classic epic 80-foot <a href="https://www.mountainproject.com/route/105944377/flight-of-the-gumby">Flight of the Gumby</a>.</p>
+<p>Climbing grades are imperfect and possess an element of subjectivity – climbers from different regions and generations may have different ideas of how difficult a particular grade “feels”. Nonetheless, climbing grades are the standard most climbers use to gauge their progression. I recently found and cleaned some climbing data scraped by <a href="https://www.kaggle.com/dcohen21/8anu-climbing-logbook">David Cohen</a>.</p>
+<div id="the-dataset" class="section level2">
+<h2>The dataset</h2>
+<p>The dataset records ascents logged by climbers on <a href="http://8a.nu/">8a.nu</a> – containing the climb’s grade, and various details about the climb and the climber. I excluded climbs graded easier than 5a (based on the <a href="https://sportrock.com/understanding-climbing-grades/">French system</a>), as anything lower is nothing more than walking up a ladder. This left over 4 million climbs logged by 35,799 users. Most users only had a few climbs logged, but a small portion logged over 1,000 climbs (<em>n</em> = 368).</p>
+<p>Because of the variation in the number of climbs across different climbers, treating each logged climb as an observation could be misleading. Instead, I’ll focus on each climber’s “ceiling” – the hardest grade climbed. This ensures that each climber is associated with a single observation.</p>
+</div>
+<div id="distributions-of-ceilings" class="section level2">
+<h2>Distributions of ceilings</h2>
+<p>I plotted the distribution of ceilings to see if there are sensible differences between groups. The following density plot shows these distributions (normalized, as there are imbalances in the number of climbers within each group in the dataset). The vertical lines indicate the median of each distribution.</p>
+<p><img src="/post/2019-05-27-passing-the-climbing-grade_files/figure-html/density-1.png" width="672" /></p>
+<p>Comparing the distributions in the bottom vs. top plot, climbers with at least one sponsor (“sponsored”) have higher ceilings (median ceilings of 7c+ and 8a for females and males, respectively) than those who are “not sponsored” (median ceilings of 7a+ and 7b+). This is a pretty obvious finding; climbers with sponsorship are likelier to climb at a higher level, and also have more time to climb.</p>
+<p>In both plots, male climbers have slightly higher ceilings on average than female climbers. However, this difference between male and female climbers’ ceilings is greater amongst climbers who are “not sponsored” (two grades) compared to those who are sponsored (only one grade). This suggests that female climbers who obtain sponsorships are especially strong relative to other female climbers.</p>
+</div>
+<div id="survival-up-the-grade-ladder" class="section level2">
+<h2>Survival up the grade ladder</h2>
+<p><a href="https://en.wikipedia.org/wiki/Survival_analysis"><em>Survival analysis</em></a> is a branch of statistics used to analyze the duration of time to an event, and the factors that influence those durations. For example, in a series of cancer patients, survival analysis would be used to figure out the probability of patients surviving for three years, and also if there are differences in survival times between patients undergoing different treatments.</p>
+<p>If a climber reaching his or her ceiling represents the event of interest, then easier grades, like a ladder leading up to the ceiling, could be viewed similarly to the time leading up to an event.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> This allowed me to ask questions about the probability of a climber obtaining a ceiling of 7b+, and if there are differences in ceilings between different groups of climbers.</p>
+<p>Using the <code>survival</code> package in <code>R</code>, I generated the following survival plots to visualize how sex and sponsorship status influences the ceiling that climbers obtain (mirroring the plot of distributions in the prior section).</p>
+<p>The first plot visualizes the probability that a male or female climber in the dataset will still be able to complete climbs of a particular grade. The second plot visualizes the probability that a sponsored or non-sponsored climber in the dataset will still be able to complete climbs of a particular grade.</p>
+<p><img src="/post/2019-05-27-passing-the-climbing-grade_files/figure-html/survSex-1.png" width="672" /></p>
+<p><img src="/post/2019-05-27-passing-the-climbing-grade_files/figure-html/survSponsor-1.png" width="672" /></p>
+<p>A Cox proportional hazards model can be used to compare the relative risk of reaching one’s ceiling between different groups. There is a lower risk of a male climber reaching a particular ceiling relative to a female climber reaching that ceiling; hazard ratio, <em>HR</em> = .39, 95% <em>CI</em> [.39, .40].<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> There is also a lower risk of a sponsored climber reaching a particular ceiling relative to a non-sponsored climber; <em>HR</em> = .21, 95% <em>CI</em> [.21, .22]. These results confirm what is visually apparent in the plots above.</p>
+</div>
+<div id="guess-who" class="section level2">
+<h2>Guess who?</h2>
+<p>I figured it would be interesting to look at potential differences between climbers from different countries. Unfortunately, that becomes unwieldly because there are 162 countries represented in the dataset. I created a survival plot featuring the six most represented countries in the dataset (USA, Spain, Poland, Germany, Italy, and France), plus the Czech Republic.</p>
+<p><img src="/post/2019-05-27-passing-the-climbing-grade_files/figure-html/survCountry-1.png" width="672" /></p>
+<p>Guess who shows up with the highest ceiling, making the Czech Republic an outlier? The dataset is anonymized, so I can’t see the climber’s name, but any climber should recognize the distorting outlier that is <a href="http://www.adamondra.com/">Adam Ondra</a>.</p>
+</div>
+<div id="next-ascents" class="section level2">
+<h2>Next ascents</h2>
+<p>This is a very preliminary look at climbing data, but there are obviously more interesting questions and fine-grained analyses that can be done. For example, having records of multiple ascents by each climber would allow a look at the rates of progression through different grades, and the factors that are related to faster or slower progress.</p>
+<p>If anyone (especially climbers) have ideas for further analyses and potential collaborations related to this dataset or similar data, I’d love to hear from you (see links in sidebar). Until then, I’ll be back to climbing as much as I can.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>In traditional survival analysis, an event like a patient dying at a particular point in time implies that the patient is still alive at all preceding points in time. Using an ordinal variable (climbing grade) in place of time is a non-traditional application. I drew the analogy because having a ceiling at a particular grade (the event) implies that a climber can climb at all grades preceding it (i.e. has not yet reached her ceiling).<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>A hazard ratio = 1 indicates the likelihood of the event occurring is the same across both groups, while <em>HR</em> &lt; 1 or &gt; 1 indicates that the likelihood of the event occurring is greater in one group.<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>
