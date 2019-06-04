@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.54.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>#TidyTuesday: Ramen ratings &middot; Casual Inference</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  
+  <link rel="icons8-scatter-plot-90" sizes="144x144" href="/icons8-scatter-plot-90.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Casual Inference" />
+
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>Casual Inference</h1></a>
+      <p class="lead">
+      Adventures of a Data Scientist <a href="http://twitter.com/civisanalytics">@CivisAnalytics</a><br>Occasional causal inferences
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/categories/"> Categories </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+    </nav>
+    
+    <div>
+        <h3 class="white">Links</h3>
+        <i class="fab fa-twitter fa-fw"></i> <a href="http://twitter.com/kevinwxsoo">Twitter</a><br>
+        <i class="fab fa-github fa-fw"></i> <a href="https://github.com/kevinsoo">GitHub</a><br>
+        <i class="far fa-envelope fa-fw"></i> <a href="mailto:kevinwxsoo@gmail.com?Subject=Hello">Email</a><br>
+        <br>
+    </div>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>#TidyTuesday: Ramen ratings</h1>
+  <time datetime=2019-06-04T00:00:00Z class="post-date">Tue, Jun 4, 2019</time>
+  
+
+
+<p><small><em><a href="https://github.com/rfordatascience/tidytuesday"><strong>#TidyTuesday</strong></a> is a weekly data project for R users to practice data wrangling and visualization skills. Users work on a new dataset released each Tuesday, and then share their work.</em></small></p>
+<p>This week’s edition (<a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-06-04">Tidy Tuesday 23</a>) contains ratings of ramen from <a href="https://www.theramenrater.com/resources-2/the-list/">The Ramen Rater</a>. For health reasons, I’m currently unable to eat most ingredients found in this delicacy, so this analysis is the closest I’ll come to ramen for now.</p>
+<div id="exploring-the-data" class="section level2">
+<h2>Exploring the data</h2>
+<p>The dataset contains a list of ramen products, including the <em>brand</em>, <em>name</em>, <em>style</em>, <em>country</em>, and rating (in <em>stars</em> from 0 to 5). To start with, I’ll plot the ratings of all ramen products by style in histograms, with lines indicating the median ratings.</p>
+<pre class="r"><code># Get median ratings
+median &lt;- ramen %&gt;%
+    drop_na(stars, style) %&gt;%
+    group_by(style) %&gt;%
+    summarise(Mdn = median(stars))
+
+# Plot ratings by style, add medians
+ramen %&gt;% 
+    drop_na(stars, style) %&gt;%
+    ggplot() +
+    geom_histogram(aes(x = stars), 
+                   binwidth = .25) +
+    geom_vline(data = median, aes(xintercept = Mdn), 
+               linetype = &quot;dashed&quot;) +
+    facet_wrap(~ style, nrow = 2) +
+    theme_minimal() +
+    labs(title = &quot;Ramen ratings by style&quot;,
+         subtitle = &quot;Dashed lines indicate median rating&quot;,
+         caption = &quot;Data: The Ramen Rater&quot;,
+         x = &quot;Rating&quot;, 
+         y = &quot;Count&quot;)</code></pre>
+<p><img src="/post/2019-06-04-tidytuesday-ramen-ratings_files/figure-html/styles-1.png" width="672" /></p>
+<p>The plot above reveals that the majority of ramen comes in bowls, cups, or packs. Additionally, the distributions for those three styles appear pretty similar; they each have a median rating just above 3.50 – most ratings are clustered around there, but there appear to be many products with ratings of 5.0 (i.e. the ratings are <a href="https://en.wikipedia.org/wiki/Multimodal_distribution">bimodal</a>).</p>
+<p>Next, I’ll look at the number of products from each country. The plot below reveals the disparity in the ramen products from each country.</p>
+<pre class="r"><code># Plot counts, ordered by country
+ramen %&gt;% 
+    drop_na(stars, style) %&gt;%
+    group_by(country) %&gt;%
+    count() %&gt;%
+    ggplot() +
+    geom_bar(aes(x = fct_reorder(country, n), y = n), 
+             stat = &quot;identity&quot;) +
+    theme_minimal() +
+    labs(title = &quot;Number of ramen products by country&quot;,
+         x = NULL,
+         y = &quot;Count&quot;) +
+    coord_flip() +
+    theme(axis.text.y = element_text(size = 6))</code></pre>
+<p><img src="/post/2019-06-04-tidytuesday-ramen-ratings_files/figure-html/countries-1.png" width="672" /></p>
+</div>
+<div id="which-country-has-the-best-ramen" class="section level2">
+<h2>Which country has the best ramen?</h2>
+<p>I’m interested in looking at differences in ratings by country. The majority of countries only have a handful of products, so for clarity I’m going to focus on the top 15 most represented countries. From the plot above, this includes Japan to India (all of which have at least 40 ramen products).</p>
+<pre class="r"><code># Compute and plot average ratings by country
+# Data for top 15 countries (those with &gt; 40 ramen products)
+ramen %&gt;%
+    drop_na(style, stars) %&gt;%
+    filter(country %in% top15) %&gt;%
+    group_by(country) %&gt;%
+    summarise(N = n(), 
+              M = mean(stars), 
+              SD = sd(stars), 
+              SE = SD/sqrt(N), 
+              CI = SE*1.96) %&gt;%
+    ggplot(aes(x = fct_reorder(country, M), y = M)) +
+    geom_hline(aes(yintercept = mean(ramen$stars, na.rm = TRUE)), 
+               linetype = &quot;dashed&quot;) +
+    geom_errorbar(aes(ymin = M - CI, ymax = M + CI, color = N), 
+                  width = .2, size = .75) +
+    geom_point(aes(color = N), size = 4) +
+    theme_minimal() +
+    theme(axis.text.y = element_text()) +
+    labs(title = &quot;Average ramen rating&quot;,
+         subtitle = &quot;Countries with more than 40 ramen products&quot;,
+         caption = &quot;Note: Error bars indicate 95% CIs,
+         Dashed line indicates overall mean&quot;,
+         x = NULL,
+         y = &quot;Average rating&quot;) +
+    scale_color_viridis_c(name = &quot;Number of\nproducts&quot;) +
+    scale_fill_viridis_c() +
+    coord_flip()</code></pre>
+<p><img src="/post/2019-06-04-tidytuesday-ramen-ratings_files/figure-html/countryRatings-1.png" width="672" /></p>
+<p>I’m proud to say that Malaysia has the highest average rating for its ramen. As shown in the plot (and indicated by one-sample <em>t</em>-tests I ran), Malaysia, Indonesia, Singapore, Japan, and South Korea all have ramen that is on average better than the overall mean (the average rating of all ramen in the dataset). Hong Kong and Taiwan are on average similar to the overall mean. The rest of the contries in the plot have ramen that is worse on average than the overall mean.</p>
+</div>
+<div id="ramen-saturation" class="section level2">
+<h2>Ramen saturation</h2>
+<p>I’ve already looked at the number of ramen products produced by each country. Japan has the most products by far, but how does it compare to other countries on a per capita basis? I merged the dataset of ramen ratings with country population data (2017) from the <a href="https://data.worldbank.org/indicator/sp.pop.totl">World Bank</a>. There will be variation across many demographic and economic factors, but a country’s population can serve as a crude stand-in for a pool of potential ramen eaters.</p>
+<p>Perhaps larger countries represent a larger potential market, leading to more ramen products being produced. The following plot displays the relationship between a country’s population and the number of ramen products in that country. Due to countries like China and India with outlier populations, I used a log transformation for the population values.</p>
+<pre class="r"><code>ramen %&gt;%
+    drop_na(style, stars) %&gt;%
+    group_by(country, label) %&gt;%
+    summarise(pop = max(population2017), 
+              N = n(),
+              perCapita = N/pop) %&gt;%
+    ggplot(aes(x = pop, y = N)) +
+    stat_smooth(method = &quot;lm&quot;) +
+    geom_point() +
+    geom_label_repel(aes(label = label), size = 3) +
+    scale_x_log10(labels = comma, minor_breaks = NULL) +
+    theme_minimal() +
+    labs(title = &quot;Ramen products and population&quot;,
+         x = &quot;Population (log scale)&quot;,
+         y = &quot;Number of products&quot;,
+         caption = &quot;Data: The Ramen Rater\nand the World Bank&quot;)</code></pre>
+<p><img src="/post/2019-06-04-tidytuesday-ramen-ratings_files/figure-html/population-1.png" width="672" /></p>
+<p>Despite the slightly positive trend, there’s no significant relationship between a country’s population and the number of products. This suggests that not all countries represent the types of markets that encourage the sale of ramen products. However, it would still be meaningful to identify the countries in which there is a high concentration of ramen products. Unfortunately, the log population scale above makes it difficult to pick out those countries.</p>
+<p>The following plot looks at the number of products per capita. Specifically, for each country, it visualizes the number of ramen products for a particular number of people in its population. Singapore has the highest ramen product saturation, with 1 product for every 41,882 people. Nigeria has the lowest product saturation, with 1 product for every 95 million people (Nigeria has over 190 million people, and only two ramen products).</p>
+<pre class="r"><code>ramen %&gt;%
+    drop_na(style, stars) %&gt;%
+    group_by(country, label) %&gt;%
+    summarise(pop = max(population2017), 
+              N = n(),
+              perCapita = N/pop,
+              oneIn = pop/N) %&gt;%
+    ggplot() +
+    geom_point(aes(x = fct_reorder(country, perCapita), y = oneIn)) +
+    theme_minimal() +
+    labs(title = &quot;Ramen product saturation&quot;,
+         x = NULL,
+         y = &quot;One product per ___ people&quot;,
+         caption = &quot;Data: The Ramen Rater\nand the World Bank&quot;) +
+    scale_y_continuous(labels = comma, 
+                       breaks = seq(0, 95000000, by = 10000000),
+                       minor_breaks = NULL) +
+    coord_flip() +
+    theme(axis.text.y = element_text(size = 6),
+          axis.text.x = element_text(angle = 45, vjust = .5))</code></pre>
+<p><img src="/post/2019-06-04-tidytuesday-ramen-ratings_files/figure-html/perCapita-1.png" width="672" /></p>
+</div>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

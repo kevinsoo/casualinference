@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>Food</title>
+      <link>/tags/food/</link>
+      <pubDate>Tue, 04 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/food/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Games</title>
       <link>/tags/games/</link>
       <pubDate>Wed, 08 May 2019 00:00:00 +0000</pubDate>
@@ -98,6 +107,15 @@
       <pubDate>Tue, 22 Nov 2016 00:00:00 +0000</pubDate>
       
       <guid>/tags/text-analysis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tidy Tuesday</title>
+      <link>/tags/tidy-tuesday/</link>
+      <pubDate>Tue, 04 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/tidy-tuesday/</guid>
       <description></description>
     </item>
     

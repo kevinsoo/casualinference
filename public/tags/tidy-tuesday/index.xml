@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tidy Tuesday on Casual Inference</title>
+    <link>/tags/tidy-tuesday/</link>
+    <description>Recent content in Tidy Tuesday on Casual Inference</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 04 Jun 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/tidy-tuesday/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>#TidyTuesday: Ramen ratings</title>
+      <link>/2019/06/04/tidytuesday-ramen-ratings/</link>
+      <pubDate>Tue, 04 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/06/04/tidytuesday-ramen-ratings/</guid>
+      <description>#TidyTuesday is a weekly data project for R users to practice data wrangling and visualization skills. Users work on a new dataset released each Tuesday, and then share their work.
+This week’s edition (Tidy Tuesday 23) contains ratings of ramen from The Ramen Rater. For health reasons, I’m currently unable to eat most ingredients found in this delicacy, so this analysis is the closest I’ll come to ramen for now.</description>
+    </item>
+    
+  </channel>
+</rss>
