@@ -95,7 +95,8 @@ ramen %&gt;%
 <h2>Ramen saturation</h2>
 <p>I’ve already looked at the number of ramen products produced by each country. Japan has the most products by far, but how does it compare to other countries on a per capita basis? I merged the dataset of ramen ratings with country population data (2017) from the <a href="https://data.worldbank.org/indicator/sp.pop.totl">World Bank</a>. There will be variation across many demographic and economic factors, but a country’s population can serve as a crude stand-in for a pool of potential ramen eaters.</p>
 <p>Perhaps larger countries represent a larger potential market, leading to more ramen products being produced. The following plot displays the relationship between a country’s population and the number of ramen products in that country. Due to countries like China and India with outlier populations, I used a log transformation for the population values.</p>
-<pre class="r"><code>ramen %&gt;%
+<pre class="r"><code># Plot ramen products by population
+ramen %&gt;%
     drop_na(style, stars) %&gt;%
     group_by(country, label) %&gt;%
     summarise(pop = max(population2017), 
@@ -114,7 +115,8 @@ ramen %&gt;%
 <p><img src="/post/2019-06-04-tidytuesday-ramen-ratings_files/figure-html/population-1.png" width="672" /></p>
 <p>Despite the slightly positive trend, there’s no significant relationship between a country’s population and the number of products. This suggests that not all countries represent the types of markets that encourage the sale of ramen products. However, it would still be meaningful to identify the countries in which there is a high concentration of ramen products. Unfortunately, the log population scale above makes it difficult to pick out those countries.</p>
 <p>The following plot looks at the number of products per capita. Specifically, for each country, it visualizes the number of ramen products for a particular number of people in its population. Singapore has the highest ramen product saturation, with 1 product for every 41,882 people. Nigeria has the lowest product saturation, with 1 product for every 95 million people (Nigeria has over 190 million people, and only two ramen products).</p>
-<pre class="r"><code>ramen %&gt;%
+<pre class="r"><code># Plot ramen saturation = 1 ramen product for every _ people 
+ramen %&gt;%
     drop_na(style, stars) %&gt;%
     group_by(country, label) %&gt;%
     summarise(pop = max(population2017), 

@@ -157,6 +157,7 @@ I've already looked at the number of ramen products produced by each country. Ja
 Perhaps larger countries represent a larger potential market, leading to more ramen products being produced. The following plot displays the relationship between a country's population and the number of ramen products in that country. Due to countries like China and India with outlier populations, I used a log transformation for the population values. 
 
 ```{r population, warning=FALSE}
+# Plot ramen products by population
 ramen %>%
     drop_na(style, stars) %>%
     group_by(country, label) %>%
@@ -180,6 +181,7 @@ Despite the slightly positive trend, there's no significant relationship between
 The following plot looks at the number of products per capita. Specifically, for each country, it visualizes the number of ramen products for a particular number of people in its population. Singapore has the highest ramen product saturation, with 1 product for every 41,882 people. Nigeria has the lowest product saturation, with 1 product for every 95 million people (Nigeria has over 190 million people, and only two ramen products).
 
 ```{r perCapita, warning=FALSE}
+# Plot ramen saturation = 1 ramen product for every _ people 
 ramen %>%
     drop_na(style, stars) %>%
     group_by(country, label) %>%
