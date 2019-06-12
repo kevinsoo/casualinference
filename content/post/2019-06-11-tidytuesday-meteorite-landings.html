@@ -1,0 +1,46 @@
+---
+title: '#TidyTuesday: Meteorite landings'
+author: Kevin Soo
+date: '2019-06-11'
+slug: tidytuesday-meteorite-landings
+categories:
+  - R
+tags:
+  - tidy tuesday
+  - science
+---
+
+
+
+<p><small><em><a href="https://github.com/rfordatascience/tidytuesday"><strong>#TidyTuesday</strong></a> is a weekly data project for R users to practice data wrangling and visualization skills. Users work on a new dataset released each Tuesday, and then share their work.</em></small></p>
+<p>This week’s edition (<a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-06-11">Tidy Tuesday 24</a>) is a dataset of meteorite landings from <a href="https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh/data">NASA</a>. It’s a pretty hectic week for me, so I decided to make a single visualization.</p>
+<p>The dataset consists of location data for each meteorite found up until 2013. I wanted to create a visualization that would capture both the geographical and temporal information, so I made an interactive map using the <code>gganimate</code> package. Each point represents the location of a meteorite in a given year, and the size of each point represents the relative mass of the meteorite.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<pre class="r"><code># Plot map
+p &lt;- ggplot(data = df) +
+    geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+                 fill = &quot;grey50&quot;, color = &quot;grey90&quot;, size = .3) +
+    geom_point(aes(x = long, y = lat, size = mass), alpha = .6, color = &quot;darkgoldenrod1&quot;) +
+    scale_color_discrete(name = &quot;Type&quot;) +
+    scale_size_continuous(guide = FALSE) +
+    theme_map() +
+    theme(panel.background = element_rect(fill = &quot;grey12&quot;),
+          panel.border = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank()) +
+    labs(title = &quot;Meteorite landings 1850-2013&quot;,
+         subtitle = &quot;Year: {round(frame_time)}&quot;,
+         caption = &quot;Data: NASA.gov&quot;) +
+    transition_time(year) +
+    enter_fade() +
+    exit_shrink() +
+    ease_aes(&quot;sine-in-out&quot;)
+
+# Create animation
+animate(p, fps = 4, height = 500, width = 690, res = 150)</code></pre>
+<p><img src="/post/2019-06-11-tidytuesday-meteorite-landings_files/animation1.gif" /></p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>I filtered the dataset to include only meteorites found from 1850. In years prior to that, there are very few meteorites in the dataset – this implies that the observation of meteorites was less sensitive back then (as it’s unlikely that meteorites have truly gotten more common over time).<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</div>

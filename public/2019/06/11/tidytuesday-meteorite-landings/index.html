@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.54.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>#TidyTuesday: Meteorite landings &middot; Casual Inference</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  
+  <link rel="icons8-scatter-plot-90" sizes="144x144" href="/icons8-scatter-plot-90.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Casual Inference" />
+
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>Casual Inference</h1></a>
+      <p class="lead">
+      Adventures of a Data Scientist <a href="http://twitter.com/civisanalytics">@CivisAnalytics</a><br>Occasional causal inferences
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/categories/"> Categories </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+    </nav>
+    
+    <div>
+        <h3 class="white">Links</h3>
+        <i class="fab fa-twitter fa-fw"></i> <a href="http://twitter.com/kevinwxsoo">Twitter</a><br>
+        <i class="fab fa-github fa-fw"></i> <a href="https://github.com/kevinsoo">GitHub</a><br>
+        <i class="far fa-envelope fa-fw"></i> <a href="mailto:kevinwxsoo@gmail.com?Subject=Hello">Email</a><br>
+        <br>
+    </div>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>#TidyTuesday: Meteorite landings</h1>
+  <time datetime=2019-06-11T00:00:00Z class="post-date">Tue, Jun 11, 2019</time>
+  
+
+
+<p><small><em><a href="https://github.com/rfordatascience/tidytuesday"><strong>#TidyTuesday</strong></a> is a weekly data project for R users to practice data wrangling and visualization skills. Users work on a new dataset released each Tuesday, and then share their work.</em></small></p>
+<p>This week’s edition (<a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-06-11">Tidy Tuesday 24</a>) is a dataset of meteorite landings from <a href="https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh/data">NASA</a>. It’s a pretty hectic week for me, so I decided to make a single visualization.</p>
+<p>The dataset consists of location data for each meteorite found up until 2013. I wanted to create a visualization that would capture both the geographical and temporal information, so I made an interactive map using the <code>gganimate</code> package. Each point represents the location of a meteorite in a given year, and the size of each point represents the relative mass of the meteorite.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<pre class="r"><code># Plot map
+p &lt;- ggplot(data = df) +
+    geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+                 fill = &quot;grey50&quot;, color = &quot;grey90&quot;, size = .3) +
+    geom_point(aes(x = long, y = lat, size = mass), alpha = .6, color = &quot;darkgoldenrod1&quot;) +
+    scale_color_discrete(name = &quot;Type&quot;) +
+    scale_size_continuous(guide = FALSE) +
+    theme_map() +
+    theme(panel.background = element_rect(fill = &quot;grey12&quot;),
+          panel.border = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank()) +
+    labs(title = &quot;Meteorite landings 1850-2013&quot;,
+         subtitle = &quot;Year: {round(frame_time)}&quot;,
+         caption = &quot;Data: NASA.gov&quot;) +
+    transition_time(year) +
+    enter_fade() +
+    exit_shrink() +
+    ease_aes(&quot;sine-in-out&quot;)
+
+# Create animation
+animate(p, fps = 4, height = 500, width = 690, res = 150)</code></pre>
+<p><img src="/post/2019-06-11-tidytuesday-meteorite-landings_files/animation1.gif" /></p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>I filtered the dataset to include only meteorites found from 1850. In years prior to that, there are very few meteorites in the dataset – this implies that the observation of meteorites was less sensitive back then (as it’s unlikely that meteorites have truly gotten more common over time).<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Casual Inference</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 04 Jun 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 11 Jun 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>#TidyTuesday: Meteorite landings</title>
+      <link>/2019/06/11/tidytuesday-meteorite-landings/</link>
+      <pubDate>Tue, 11 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/06/11/tidytuesday-meteorite-landings/</guid>
+      <description>#TidyTuesday is a weekly data project for R users to practice data wrangling and visualization skills. Users work on a new dataset released each Tuesday, and then share their work.
+This week’s edition (Tidy Tuesday 24) is a dataset of meteorite landings from NASA. It’s a pretty hectic week for me, so I decided to make a single visualization.
+The dataset consists of location data for each meteorite found up until 2013.</description>
+    </item>
     
     <item>
       <title>#TidyTuesday: Ramen ratings</title>
