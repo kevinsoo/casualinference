@@ -19,7 +19,8 @@ tags:
 p &lt;- ggplot(data = df) +
     geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                  fill = &quot;grey50&quot;, color = &quot;grey90&quot;, size = .3) +
-    geom_point(aes(x = long, y = lat, size = mass), alpha = .6, color = &quot;darkgoldenrod1&quot;) +
+    geom_point(aes(x = long, y = lat, size = mass), 
+               alpha = .6, color = &quot;darkgoldenrod1&quot;) +
     scale_color_discrete(name = &quot;Type&quot;) +
     scale_size_continuous(guide = FALSE) +
     theme_map() +

@@ -43,7 +43,8 @@ The dataset consists of location data for each meteorite found up until 2013. I 
 p <- ggplot(data = df) +
     geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                  fill = "grey50", color = "grey90", size = .3) +
-    geom_point(aes(x = long, y = lat, size = mass), alpha = .6, color = "darkgoldenrod1") +
+    geom_point(aes(x = long, y = lat, size = mass), 
+               alpha = .6, color = "darkgoldenrod1") +
     scale_color_discrete(name = "Type") +
     scale_size_continuous(guide = FALSE) +
     theme_map() +
