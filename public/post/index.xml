@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Casual Inference</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 11 Jun 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 02 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Dem Debate 1: Sentiment analysis</title>
+      <link>/2019/07/02/dem-debate-1-sentiment-analysis/</link>
+      <pubDate>Tue, 02 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/07/02/dem-debate-1-sentiment-analysis/</guid>
+      <description>The 2020 Democratic race finally got underway after last week’s first debates (even though it feels like the race has been going on forever). I’ve been absorbing plenty of commentary of how the two nights transpired (including a few more data-centric and analytical pieces).
+Not forgetting the gif-able moments.
+I downloaded the full debate transcripts from NBC News (posted here and here) and cleaned it up a little to play around with.</description>
+    </item>
     
     <item>
       <title>#TidyTuesday: Meteorite landings</title>

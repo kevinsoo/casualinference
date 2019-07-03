@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.54.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Dem Debate 1: Sentiment analysis &middot; Casual Inference</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  
+  <link rel="icons8-scatter-plot-90" sizes="144x144" href="/icons8-scatter-plot-90.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Casual Inference" />
+
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>Casual Inference</h1></a>
+      <p class="lead">
+      Adventures of a Data Scientist <a href="http://twitter.com/civisanalytics">@CivisAnalytics</a><br>Occasional causal inferences
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/categories/"> Categories </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+    </nav>
+    
+    <div>
+        <h3 class="white">Links</h3>
+        <i class="fab fa-twitter fa-fw"></i> <a href="http://twitter.com/kevinwxsoo">Twitter</a><br>
+        <i class="fab fa-github fa-fw"></i> <a href="https://github.com/kevinsoo">GitHub</a><br>
+        <i class="far fa-envelope fa-fw"></i> <a href="mailto:kevinwxsoo@gmail.com?Subject=Hello">Email</a><br>
+        <br>
+    </div>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Dem Debate 1: Sentiment analysis</h1>
+  <time datetime=2019-07-02T00:00:00Z class="post-date">Tue, Jul 2, 2019</time>
+  
+
+
+<p>The 2020 Democratic race finally got <a href="https://www.cnn.com/2019/06/29/politics/democratic-debates-2020-kamala-harris-joe-biden/index.html">underway</a> after last week’s first debates (even though it feels like the race has been going on forever). I’ve been absorbing <a href="https://www.vox.com/2019/6/26/18760593/who-won-the-democratic-debate">plenty</a> of <a href="https://www.vox.com/2019/6/28/18904938/who-won-the-democratic-debate-night-two">commentary</a> of how the two nights <a href="https://www.theatlantic.com/ideas/archive/2019/06/second-night-democratic-debates-went-badly/592924/">transpired</a> (including a few more <a href="https://www.washingtonpost.com/politics/2019/06/27/all-interruptions-alignments-attacks-first-debate-night/?utm_term=.5a214b5632c2">data-centric</a> and <a href="https://projects.fivethirtyeight.com/democratic-debate-poll/">analytical</a> pieces).</p>
+<p><img src="/post/2019-07-02-dem-debate-1-sentiment-analysis_files/debate.gif" style="width:80.0%;height:80.0%" />
+<sub><sup>Not forgetting the gif-able moments.</sup></sub></p>
+<p>I downloaded the full debate transcripts from NBC News (posted <a href="https://www.nbcnews.com/politics/2020-election/full-transcript-first-democratic-primary-debate-2019-n1022816">here</a> and <a href="https://www.nbcnews.com/politics/2020-election/full-transcript-2019-democratic-debate-night-two-sortable-topic-n1023601">here</a>) and cleaned it up a little to play around with. You can download it <a href="https://github.com/kevinsoo/demDebates/raw/master/Data/demDebate1_2019-06-26_27.Rda">here</a> as an R data frame.</p>
+<p>For this post, I attempted some basic <a href="https://towardsdatascience.com/sentiment-analysis-concept-analysis-and-applications-6c94d6f58c17">sentiment analysis</a> to visualize how the mood of the debates progressed over time and between candidates.</p>
+<div id="moody-speeches" class="section level2">
+<h2>Moody speeches</h2>
+<p>First, I wanted to look at the mood of the speeches given. A <em>speech</em> is a conversational turn taken by one speaker until another speaker takes a turn.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>The <code>tidytext</code> package contains several datasets that classifies or rates words in terms of their sentiment. One of these, by <a href="https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html">Bing Liu et al.</a>, classifies 6,788 terms as either “positive” or “negative”. Using this dataset, I counted the number of positive and negative terms within each speech after removing stopwords (“the”, “and”, “a”…). This yielded a sentiment difference score for each speech. If a speech contains 10 “positive” words and 4 “negative” words, this results in a sentiment score of +6.</p>
+<p>Plotting the difference scores over time show the sentimental trends of each debate. For both nights of the debate, the speeches start off slightly more positive before becoming more negative, and end with a positive flourish. In the following graphs, I also labeled a few outliers.</p>
+<p><img src="/post/2019-07-02-dem-debate-1-sentiment-analysis_files/figure-html/speech-1.png" width="672" /></p>
+<p>During the Night 1 debate, Amy Klobuchar wrapped up with a pitch containing a +11 sentiment score. During the Night 2 debate, Kamala Harris gave both the most positive and most negative<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> speeches.</p>
+</div>
+<div id="moodiest-candidate" class="section level2">
+<h2>Moodiest candidate?</h2>
+<p>Plotting the difference scores above by candidate instead reveals which candidates employed more “positive” vs. “negative” terms in their speeches.</p>
+<p><img src="/post/2019-07-02-dem-debate-1-sentiment-analysis_files/figure-html/candidate-1.png" width="672" /></p>
+<p>Amy Klobuchar uses the most “positive” terms on average. Amongst the other major candidates, Elizabeth Warren and Joe Biden are the only ones with at least neutral speeches. Every other major candidate (and most candidates overall) use more “negative” terms on average, with Pete Buttigieg and Kamala Harris being the most extreme.</p>
+</div>
+<div id="candidate-trends" class="section level2">
+<h2>Candidate trends</h2>
+<p>Returning to the sentiment trend evident across the debates, I wondered if the candidates had different sentiment trends as the debate wore on. Computing sentiment by speech will likely result in too few observations to discern these trends. One solution is to compute the sentiment of individual words (excluding stopwords).</p>
+<p>The <code>tidytext</code> package contains another sentiment dataset by <a href="https://arxiv.org/abs/1103.2903">Finn Årup Nielsen</a> that rates 2,476 words on a scale from -5 to +5. The numerical range allows us to discriminate between words that possess sentiments of differing magnitudes (as opposed to simply “positive” vs. “negative”).</p>
+<p>In the following graphs, I plot the trends for the top 8 candidates (in terms of <a href="https://fivethirtyeight.com/features/the-dnc-tried-to-avoid-a-lopsided-debate-it-got-one-anyway/">polling averages</a>). Most of these candidates appear to use more “positive” words at the end of the debate, which makes sense if they are trying to leave a positive impression of themselves to the audience.</p>
+<p><img src="/post/2019-07-02-dem-debate-1-sentiment-analysis_files/figure-html/words-1.png" width="672" /></p>
+<p>A quick visual inspection reveals some qualitative differences Some candidates like Beto O’Rourke, Cory Booker, and Joe Biden have relatively low variation in their sentiment. Elizabeth Warren and Amy Klobuchar demonstrate more complex trends – they start out pretty negative and fluctuate before a positive finish.</p>
+</div>
+<div id="beyond-sentiment" class="section level2">
+<h2>Beyond sentiment</h2>
+<p>While a sentiment analysis of words used in the debates reveal trends and distinctions between candidates, there are limitations to focusing on sentiment alone. The sentiment of words can be influenced by more complex contextual factors, and the intended meaning of an utterance may not be obvious from the words being used. I’ll come back to this dataset, hopefully before the next Democratic debate.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>A speech could end because a speaker yields the floor, but could also end due to an interruption (in which case, the interruption counts as the next speech). This distinction is unimportant for the present analyses.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>I thought Harris’ most negative speech would be when she <a href="https://www.theatlantic.com/ideas/archive/2019/06/joe-biden-vs-kamala-harris-bussing-and-race-issues/592912/">attacked</a> Joe Biden, but it was actually a speech during which she managed to cover both the climate crisis and the threat Donald Trump poses to national security because of his relationships with Putin and Kim Jong-un.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

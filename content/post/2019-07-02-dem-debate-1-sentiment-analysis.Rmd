@@ -1,0 +1,174 @@
+---
+title: 'Dem Debate 1: Sentiment analysis'
+author: Kevin Soo
+date: '2019-07-02'
+slug: dem-debate-1-sentiment-analysis
+categories:
+  - R
+tags:
+  - politics
+  - text analysis
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load libraries
+library(tidyverse)
+library(tidytext)
+library(widyr)
+library(tidyr)
+library(ggrepel)
+library(cowplot)
+
+# Load data
+load(file = "files/dem-debate-1-sentiment-analysis//demDebate1_2019-06-26_27.Rda")
+
+# Get data in tidy format, eliminate stop-words
+tidyDem <- demDeb %>% 
+      filter(!Type %in% c("Moderator", "Unknown", "Announcer")) %>% 
+      mutate(Top = ifelse(Speaker %in% c("Biden", "Sanders", "Warren", "Harris", 
+                                         "Buttigieg", "O'Rourke", "Booker", "Klobuchar"), 
+                          Speaker, "Rest of field")) %>% 
+      unnest_tokens(word, Speech) %>% 
+      anti_join(stop_words, by = "word")
+```
+
+The 2020 Democratic race finally got [underway](https://www.cnn.com/2019/06/29/politics/democratic-debates-2020-kamala-harris-joe-biden/index.html) after last week's first debates (even though it feels like the race has been going on forever). I've been absorbing [plenty](https://www.vox.com/2019/6/26/18760593/who-won-the-democratic-debate) of [commentary](https://www.vox.com/2019/6/28/18904938/who-won-the-democratic-debate-night-two) of how the two nights [transpired](https://www.theatlantic.com/ideas/archive/2019/06/second-night-democratic-debates-went-badly/592924/) (including a few more [data-centric](https://www.washingtonpost.com/politics/2019/06/27/all-interruptions-alignments-attacks-first-debate-night/?utm_term=.5a214b5632c2) and [analytical](https://projects.fivethirtyeight.com/democratic-debate-poll/) pieces).
+
+![](/post/2019-07-02-dem-debate-1-sentiment-analysis_files/debate.gif){width=80% height=80%}
+<sub><sup>Not forgetting the gif-able moments.</sup></sub>
+
+I downloaded the full debate transcripts from NBC News (posted [here](https://www.nbcnews.com/politics/2020-election/full-transcript-first-democratic-primary-debate-2019-n1022816) and [here](https://www.nbcnews.com/politics/2020-election/full-transcript-2019-democratic-debate-night-two-sortable-topic-n1023601)) and cleaned it up a little to play around with. You can download it [here](https://github.com/kevinsoo/demDebates/raw/master/Data/demDebate1_2019-06-26_27.Rda) as an R data frame. 
+
+For this post, I attempted some basic [sentiment analysis](https://towardsdatascience.com/sentiment-analysis-concept-analysis-and-applications-6c94d6f58c17) to visualize how the mood of the debates progressed over time and between candidates. 
+
+## Moody speeches
+
+First, I wanted to look at the mood of the speeches given. A *speech* is a conversational turn taken by one speaker until another speaker takes a turn.[^1]
+
+The `tidytext` package contains several datasets that classifies or rates words in terms of their sentiment. One of these, by [Bing Liu et al.](https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html), classifies 6,788 terms as either "positive" or "negative". Using this dataset, I counted the number of positive and negative terms within each speech after removing stopwords ("the", "and", "a"...). This yielded a sentiment difference score for each speech. If a speech contains 10 "positive" words and 4 "negative" words, this results in a sentiment score of +6.
+
+Plotting the difference scores over time show the sentimental trends of each debate. For both nights of the debate, the speeches start off slightly more positive before becoming more negative, and end with a  positive flourish. In the following graphs, I also labeled a few outliers.
+
+```{r speech, echo=FALSE, message=FALSE, warning=FALSE}
+# Pos vs. Neg sentiment
+demSpeech <- tidyDem %>%
+      inner_join(get_sentiments("bing")) %>%
+      count(Speaker, Top, sentiment) %>%
+      spread(sentiment, n, fill = 0) %>%
+      mutate(sentiment = positive - negative)
+
+# Plot
+demSpeech %>% 
+      mutate(Words = negative + positive,
+             label = ifelse(sentiment == 11, "Klobuchar", 
+                            ifelse(sentiment == 9, "Harris",
+                                   ifelse(sentiment == -15, "Harris", NA)))) %>%
+      group_by(Debate) %>% 
+      mutate(n = row_number()) %>% 
+      ggplot(aes(x = n, y = sentiment)) +
+      geom_hline(yintercept = 0, linetype = "dashed") +
+      geom_point(alpha = .8, aes(color = sentiment)) +
+      geom_text_repel(aes(label = label), size = 3) +
+      facet_grid(~ Debate, scales = "free_x") +
+      stat_smooth(color = "dodgerblue2") +
+      scale_color_viridis_c(guide = FALSE) +
+      theme_minimal() +
+      theme(axis.text.x = element_blank()) +
+      labs(x = NULL, y = "Sentiment difference score", 
+           title = "Speech sentiment at the Dem Debates (June 2019)",
+           caption = "\nNote: Each observation represents a conversational turn")
+```
+
+During the Night 1 debate, Amy Klobuchar wrapped up with a pitch containing a +11 sentiment score. During the Night 2 debate, Kamala Harris gave both the most positive and most negative[^2] speeches. 
+
+## Moodiest candidate?
+
+Plotting the difference scores above by candidate instead reveals which candidates employed more "positive" vs. "negative" terms in their speeches.
+
+```{r candidate, echo=FALSE, message=FALSE, warning=FALSE}
+# Descriptives
+desc <- demSpeech %>% 
+  group_by(Debate, Speaker) %>% 
+  summarise(N = n(), M = mean(sentiment), SE = (sd(sentiment))/sqrt(N))
+
+# Plot
+desc %>% 
+      ggplot(aes(x = fct_reorder(Speaker, M), y = M)) +
+      geom_hline(yintercept = 0, linetype = "dashed") +
+      geom_errorbar(aes(ymin = M - SE, ymax = M + SE), width = .2, color = "grey40") +
+      geom_point(alpha = 1, aes(fill = Debate, size = N), shape = 21, color = "black") +
+      scale_color_viridis_d() +
+      scale_fill_viridis_d() +
+      scale_size_continuous(guide = FALSE) +
+      theme_minimal() +
+      coord_flip() +
+      theme(legend.title = element_blank()) +
+      labs(x = NULL, y = "Sentiment difference score", 
+           title = "Average speech sentiment by candidate",
+           caption = "\nNote: Error bars represent SEs\nSize of points represent number of speeches")
+```
+
+Amy Klobuchar uses the most "positive" terms on average. Amongst the other major candidates, Elizabeth Warren and Joe Biden are the only ones with at least neutral speeches. Every other major candidate (and most candidates overall) use more "negative" terms on average, with Pete Buttigieg and Kamala Harris being the most extreme.
+
+## Candidate trends
+
+Returning to the sentiment trend evident across the debates, I wondered if the candidates had different sentiment trends as the debate wore on. Computing sentiment by speech will likely result in too few observations to discern these trends. One solution is to compute the sentiment of individual words (excluding stopwords).
+
+The `tidytext` package contains another sentiment dataset by [Finn Årup Nielsen](https://arxiv.org/abs/1103.2903) that rates 2,476 words on a scale from -5 to +5. The numerical range allows us to discriminate between words that possess sentiments of differing magnitudes (as opposed to simply "positive" vs. "negative").
+
+In the following graphs, I plot the trends for the top 8 candidates (in terms of [polling averages](https://fivethirtyeight.com/features/the-dnc-tried-to-avoid-a-lopsided-debate-it-got-one-anyway/)). Most of these candidates appear to use more "positive" words at the end of the debate, which makes sense if they are trying to leave a positive impression of themselves to the audience. 
+
+```{r words, echo=FALSE, message=FALSE, warning=FALSE}
+# Continuous sentiment
+demWords <- tidyDem %>%
+      inner_join(get_sentiments("afinn"))
+
+# Plot
+n1 <- demWords %>% 
+      filter(Top != "Rest of field", Debate == "Night 1") %>% 
+      group_by(Top) %>% 
+      mutate(n = row_number(),
+             Speaker = factor(Speaker, levels = c("Warren", "O'Rourke", "Booker", "Klobuchar"))) %>% 
+      ggplot(aes(x = n, y = score)) +
+      facet_grid(~ Speaker, scales = "free_x") +
+      geom_hline(yintercept = 0, linetype = "dashed") +
+      geom_point(alpha = .7, aes(color = score)) +
+      stat_smooth(color = "dodgerblue2") +
+      scale_color_viridis_c(guide = FALSE) +
+      theme_minimal() +
+      theme(axis.text.x = element_blank()) +
+      scale_y_continuous(limits = c(-4, 4)) +
+      labs(x = NULL, y = "Sentiment", 
+           title = "Word sentiment for top candidates",
+           subtitle = "Night 1")
+n2 <- demWords %>% 
+      filter(Top != "Rest of field", Debate == "Night 2") %>% 
+      group_by(Top) %>% 
+      mutate(n = row_number(),
+             Speaker = factor(Speaker, levels = c("Biden", "Sanders", "Harris", "Buttigieg"))) %>% 
+      ggplot(aes(x = n, y = score)) +
+      facet_grid(~ Speaker, scales = "free_x") +
+      geom_hline(yintercept = 0, linetype = "dashed") +
+      geom_point(alpha = .7, aes(color = score)) +
+      stat_smooth(color = "dodgerblue2") +
+      scale_color_viridis_c(guide = FALSE) +
+      theme_minimal() +
+      theme(axis.text.x = element_blank()) +
+      scale_y_continuous(limits = c(-4, 4)) +
+      labs(x = NULL, y = "Sentiment", 
+           title = NULL,
+           caption = "\nNote: Each observation represents a word",
+           subtitle = "Night 2")
+plot_grid(n1, n2, nrow = 2)
+```
+
+A quick visual inspection reveals some qualitative differences Some candidates like Beto O'Rourke, Cory Booker, and Joe Biden have relatively low variation in their sentiment. Elizabeth Warren and Amy Klobuchar demonstrate more complex trends -- they start out pretty negative and fluctuate before a positive finish.
+
+## Beyond sentiment
+
+While a sentiment analysis of words used in the debates reveal trends and distinctions between candidates, there are limitations to focusing on sentiment alone. The sentiment of words can be influenced by more complex contextual factors, and the intended meaning of an utterance may not be obvious from the words being used. I'll come back to this dataset, hopefully before the next Democratic debate.
+
+[^1]: A speech could end because a speaker yields the floor, but could also end due to an interruption (in which case, the interruption counts as the next speech). This distinction is unimportant for the present analyses.
+[^2]: I thought Harris' most negative speech would be when she [attacked](https://www.theatlantic.com/ideas/archive/2019/06/joe-biden-vs-kamala-harris-bussing-and-race-issues/592912/) Joe Biden, but it was actually a speech during which she managed to cover both the climate crisis and the threat Donald Trump poses to national security because of his relationships with Putin and Kim Jong-un.
