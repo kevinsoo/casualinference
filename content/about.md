@@ -4,7 +4,7 @@ title: "About"
 date: "2019-03-30"
 ---
 
-![](/./about_files/likethedickens.jpg)
+![](/./about_files/likethedickens_alt.jpg)
 <sub><sup>Me attempting Like the Dickens (V7) @ Coll's Cove in PA, Spring 2019.</sup></sub>
 
 Hello, I'm Kevin. I'm a Data Scientist at [Civis Analytics](https://civisanalytics.com), where I use computational methods to answer questions and propose solutions to problems faced by the public sector.
