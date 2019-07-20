@@ -7,7 +7,7 @@ date: "2019-03-30"
 ![](/./about_files/likethedickens.jpg)
 <sub><sup>Me attempting Like the Dickens (V7) @ Coll's Cove in PA, Spring 2019.</sup></sub>
 
-Hello, I'm Kevin. I'm a soon-to-be Data Scientist at [Civis Analytics](https://civisanalytics.com), where I'll use computational methods to answer questions and propose solutions to problems faced by the public sector.
+Hello, I'm Kevin. I'm a Data Scientist at [Civis Analytics](https://civisanalytics.com), where I use computational methods to answer questions and propose solutions to problems faced by the public sector.
 
 I completed a PhD in cognitive psychology at the University of Pittsburgh. I researched how people make inferences about cause-effect relationships, commonly referred to as causal reasoning (even more commonly mistaken for "casual" reasoning). You can read about my academic work [here](/academic/index.html).
 
