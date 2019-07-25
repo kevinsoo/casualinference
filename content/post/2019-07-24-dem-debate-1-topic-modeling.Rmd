@@ -232,7 +232,7 @@ df %>%
 
 #### Scattered candidates
 
-It's hard to succintly describe the patterns of the remaining nine candidates. I couldn't help notice that Cory Booker's topic distribution is eerily similar to Marianne Williamson. He might want to do more to differentiate himself a little in his speech from [Marianne](https://gizmodo.com/marianne-williamson-loves-spreading-fake-quotes-from-al-1836630042).
+It's hard to succintly describe the patterns of the remaining nine candidates. I couldn't help notice that Cory Booker's topic distribution is eerily similar to Marianne Williamson. They might want to do more to differentiate themselves.
 
 ```{r groupB, echo=FALSE, message=FALSE, warning=FALSE, fig.height=8, fig.width=9}
 # Plot
