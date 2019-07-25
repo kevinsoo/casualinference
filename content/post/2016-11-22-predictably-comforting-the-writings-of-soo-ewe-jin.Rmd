@@ -185,7 +185,7 @@ As mentioned above, the absence of a particular word doesn't imply that a partic
 
 3. **Each article is about a combination of the topics in different proportions; we figure out the proportions from the words that are present.** Some articles are about a particular topic more than any other -- if so, we expect to see many words associated that topic, but few words associated with other topics. Some articles are about multiple topics, in which case we expect to see words associated with multiple topics.
 
-#### 3.1 Identifying the topics
+#### Identifying the topics
 
 It's tricky to identify the number of topics (*k*) present in a corpus. There are some [mathematical](http://stackoverflow.com/questions/21355156/topic-models-cross-validation-with-loglikelihood-or-perplexity/21394092) [approaches](http://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-16-S13-S8) to determining the optimal *k*, but they do not always produce topics (i.e. clusters of words) that are semantically meaningful. A simpler method is specifying an *a priori* number of topics, running the algorithm, and looking at the words (terms) associated with each topic to see if they are semantically meaningful. As mentioned above, *k* of 2 to 5 seem like reasonable values for a columnist like my dad.
 
@@ -262,7 +262,7 @@ topics %>% filter(section=="Business") %>% group_by(section, topic) %>% summaris
 
 Only 22 of 52 articles he wrote in the business section were classified as being about *Society*. It seems that even when writing in the business section, he could not help but include *Encouragement* and *Reflections*. That's just the kind of person he was.
 
-#### 3.3 Writing over time
+#### Writing over time
 
 The prior analysis shows my dad's writings were pretty consistently about three dominant topics. Did his focus on each of these topics change over time? The following graphs plot *P*(topic|article) for each topic over time. A linear trend has been fitted to each graph so we can see if there are trends over time in each topic.
 
@@ -286,7 +286,7 @@ topicsOverTime %>% filter() %>%
 
 Over time, his writings increasingly focused on *Reflections* and less on *Encouragement* (the correlation between these topics is negative, *r* = -.59). This doesn't mean my dad was getting less encouraging, merely that over time his writings consisted less of words exclusive to that topic (and even in his last few years, *P*(topic = *Encouragement*|article) was still pretty high -- around .3 on average). My best guess is that my dad became more reflective (see the increase in *Reflections* over time), and that decreased the space he could dedicate to other topics.
 
-### 4 Conclusion
+## Conclusion
 
 As much as an analysis of word frequencies and topic models can shed light on the content of my dad's writings, they cannot capture everything. This failure goes beyond the deliberate simplification of problems I have permitted to keep things practical, and beyond the subjective nature of some of these analyses (e.g., I don't have any more justification for choosing *k* = 3 other than that those three topics make sense). 
 

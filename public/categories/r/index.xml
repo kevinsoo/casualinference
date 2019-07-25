@@ -6,10 +6,20 @@
     <description>Recent content in R on Casual Inference</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 02 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 24 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Dem Debate 1: Topic modeling</title>
+      <link>/2019/07/24/dem-debate-1-topic-modeling/</link>
+      <pubDate>Wed, 24 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/07/24/dem-debate-1-topic-modeling/</guid>
+      <description>The second Democratic debate is almost here, so I wanted to follow up the sentiment analysis I performed on the first debate by looking at the topics that were talked about across the two nights.
+In natural language processing, a topic model is a statistical model that can be used to infer the underlying meanings (i.e. topics) of utterances based on the words being used. In this post, I use Latent Dirichlet Allocation (LDA) from the topicmodels package to infer what each speech by the candidates is about.</description>
+    </item>
     
     <item>
       <title>Dem Debate 1: Sentiment analysis</title>

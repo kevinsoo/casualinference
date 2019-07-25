@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/2019/07/24/dem-debate-1-topic-modeling/</loc>
+    <lastmod>2019-07-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/2019/07/02/dem-debate-1-sentiment-analysis/</loc>
     <lastmod>2019-07-02T00:00:00+00:00</lastmod>
   </url>
@@ -94,7 +99,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-07-02T00:00:00+00:00</lastmod>
+    <lastmod>2019-07-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -122,13 +127,13 @@
   </url>
   
   <url>
-    <loc>/categories/general/</loc>
+    <loc>/tags/general/</loc>
     <lastmod>2019-04-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/general/</loc>
+    <loc>/categories/general/</loc>
     <lastmod>2019-04-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -147,7 +152,7 @@
   
   <url>
     <loc>/tags/politics/</loc>
-    <lastmod>2019-07-02T00:00:00+00:00</lastmod>
+    <lastmod>2019-07-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -159,13 +164,13 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2019-07-02T00:00:00+00:00</lastmod>
+    <lastmod>2019-07-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/r/</loc>
-    <lastmod>2019-07-02T00:00:00+00:00</lastmod>
+    <lastmod>2019-07-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -195,7 +200,7 @@
   
   <url>
     <loc>/tags/text-analysis/</loc>
-    <lastmod>2019-07-02T00:00:00+00:00</lastmod>
+    <lastmod>2019-07-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
