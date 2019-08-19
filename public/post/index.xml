@@ -6,10 +6,20 @@
     <description>Recent content in Posts on Casual Inference</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 24 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 19 Aug 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Real world: NFL player value in the 2018 season</title>
+      <link>/2019/08/19/real-world-nfl-player-value-in-the-2018-season/</link>
+      <pubDate>Mon, 19 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/08/19/real-world-nfl-player-value-in-the-2018-season/</guid>
+      <description>I learned to love American football through Fantasy Football, which I imagine is a pretty common gateway (especially for those with a quantitative bent). However, watching football through the lens of fantasy sports can distort one’s view of the game.
+One potential distortion relates to how we understand each player’s contribution to a team’s performance. In fantasy football, a top-tier running back (RB) is way more valuable than a top-tier quarterback (QB).</description>
+    </item>
     
     <item>
       <title>Dem Debate 1: Topic modeling</title>

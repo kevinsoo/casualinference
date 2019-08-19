@@ -1,0 +1,183 @@
+---
+title: 'Real world: NFL player value in the 2018 season'
+author: Kevin Soo
+date: '2019-08-19'
+slug: real-world-nfl-player-value-in-the-2018-season
+categories:
+  - R
+tags:
+  - sports
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load libraries
+library(tidyverse)
+library(plotly)
+library(scales)
+library(DT)
+library(rmarkdown)
+
+# Load data
+load(file = "files/real-world-nfl-player-value-in-the-2018-season/real_value_2018.Rda")
+
+# Get median salaries and average stats by position
+avg <- real %>% 
+      group_by(Position) %>% 
+      summarise(`Ave. cap hit` = mean(CapHit),
+                mdnCapHit = median(CapHit),
+                `Ave. DYAR` = mean(DYAR),
+                `Ave. DVOA` = mean(wDVOA))
+
+# Compute value
+real <- real %>% 
+    rename(Touches = TotalTouch,
+           `Cap hit` = CapHit) %>% 
+    mutate(Player = FullName,
+           `DYAR per $1,000` = round((DYAR/`Cap hit`) * 1000, 2))
+```
+
+I learned to love American football through [Fantasy Football](https://casualinference.netlify.com/2017/12/10/fantasy-football-season-in-review-2017-2018/), which I imagine is a pretty common gateway (especially for those with a quantitative bent). However, watching football through the lens of fantasy sports can [distort one's view](https://slate.com/culture/2017/08/does-fantasy-football-ruin-football-fandom.html) of the game.
+
+One potential distortion relates to how we understand each player's contribution to a team's performance. In fantasy football, a top-tier running back (RB) is way [more valuable](http://www.lateroundqb.com/why-you-should-draft-your-quarterback-late-every-single-year/) than a top-tier quarterback (QB). However, the [value of running backs](https://www.theringer.com/nfl/2018/12/21/18151201/nfl-running-back-value-debate-steelers-chiefs-seahawks-cardinals) in the NFL has been [disputed in recent seasons](https://www.theringer.com/nfl/2018/12/21/18151201/nfl-running-back-value-debate-steelers-chiefs-seahawks-cardinals).
+
+## Value in the real world
+
+At the most general level, a player's *value* is determined by their *contribution* to a team's performances vs. their *cost* to a team. A \$1 million quarterback who contributes a certain amount to his team's success is more valuable than a \$10 million quarterback who contributes an equivalent amount, because his lower salary leaves room for investing in the rest of the team. While it makes sense for teams to pay top-dollar for top-level talents, good teams are after value: securing the best contributions for the lowest price.
+
+#### Cost
+
+A player's cost to a team can be most easily quantified by his [*cap hit*](https://bleacherreport.com/articles/1665623-how-does-the-salary-cap-work-in-the-nfl), or how much he will count against his team's salary cap that season.[^1] I scraped this data from [Spotrac.com](https://www.spotrac.com/rankings/nfl/cap-hit/).
+
+#### Contribution
+
+A player's contribution is much harder to quantify. Traditional stats like yards gained don't typically capture a player's importance, because not all yards are created equal. A gain of 3 yards on 3rd-and-10 does not help a team, but a similar gain on 3rd-and-2 leads to a first down. Many have come up with really interesting methods for measuring a player's contribution (I especially like [nflWAR](https://arxiv.org/abs/1802.00998) by Yurko, Ventura & Horowitz, 2018).
+
+For my analysis, I scraped data of [FootballOutsiders](https://www.footballoutsiders.com)'s *Defense-adjusted Yards Above Replacement* (DYAR). Their [full explanation](https://www.footballoutsiders.com/info/methods#DYAR) of this is worth reading. In short, it calculates a player's contribution relative to a "replacement-level" alternative (i.e. the median player at that position) over the course of a season. I decided to look only at offensive skill players (quarterbacks, running backs, tight ends, and wide receivers) so that I could compare them to my future analysis of fantasy football value (since standard fantasy leagues omit other positions).
+
+## Visualizing value
+
+I used the `plotly` library to produce the interactive plots below. Hovering over each point will reveal that player's DYAR and cap hit for the 2018 season (you can also drag a box over a region on each plot you want to zoon in on.
+
+The plots include regression lines capturing the relationship between players' cap hits and their DYAR. For quarterbacks (QB), cap hit accounts for 22% of the variation in DYAR. For wide receivers (WR), cap hit accounts for 12% of the variation. (By social science standards, these are pretty large effects). For tight ends (TE), cap hit accounts for 5% of the variation; smaller but still statistically significant. In other words, more costly players at these positions tend to contribute more on average.
+
+However, for running backs (RB), cap hit only accounts for less than 1% of the variation and this relationship is not statistically significant. Consistent with the aforementioned take that running backs lack value, teams are able to get good production out of even cheaper running backs.
+
+```{r value, echo=FALSE, message=FALSE, warning=FALSE}
+ggplotly(real %>% 
+      ggplot(aes(x = `Cap hit`, y = DYAR)) +
+      facet_wrap(~ Position, ncol = 2, scales = "free") +
+      geom_vline(data = avg, aes(xintercept = `Ave. cap hit`), 
+                 linetype = 2, color = "red") +
+      geom_hline(data = avg, aes(yintercept = `Ave. DYAR`), 
+                 linetype = 2, color = "red") +
+      geom_point(alpha = .3, aes(text = paste0(FullName, " (", Team, ")"))) +
+      stat_smooth(method = "lm", se = TRUE) +
+      scale_x_continuous(label = comma) +
+      labs(title = "NFL Player Value (2018 season)",
+           caption = "\nRed lines indicate averages across all players at that position") +
+      theme_minimal() +
+      scale_color_viridis_d(guide = FALSE) +
+      theme(axis.text.x = element_text(size = 5))
+      )
+```
+
+Players higher up on the y-axis contributed more DYAR, and players furter to the right on the x-axis had larger cap hits. In each plot, I have included red lines indicating the average cap hit and DYAR by position. 
+
+Players in the upper left quadrants possessed the best value -- their cap hits were less than average, and they produced above average DYAR. Examples of these were TE George Kittle and QB Patrick Mahomes, who gained the most DYAR at their respective positions in 2018 on relatively low cap hits. Players in the lower right quadrant had the worst value. For example, RB LeSean McCoy had the highest cap hit at his position, and actually produced -134 DYAR (he contributed way less than an average RB).
+
+## Value rankings
+
+The plots above are pretty useful for spotting outliers, but it's difficult to compare the relative value of players that appear close together. For each position, the following tables display the relative value of the most active players (I excluded players that played very little). Value is computed as the DYAR gained per $1,000 of that player's cap hit.[^2] 
+
+The tables are ordered to display players with the highest value first. Click on the *DYAR per \$1,000* column to reverse the order and view the least valuable players. You can also sort by other variables like *cap hit*, *touches*, and *DYAR*.
+
+#### QB
+
+Only quarterbacks with at least 210 touches (passes + rushes) are included.
+
+```{r qb, echo=FALSE, message=FALSE, warning=FALSE}
+qb <- real %>% 
+  filter(Position == "QB",
+         Touches >= 210) %>% 
+  select(Player, Team, `Cap hit`, DYAR, Touches, `DYAR per $1,000`) %>% 
+  arrange(-`DYAR per $1,000`)
+
+datatable(qb, 
+          extensions = 'FixedColumns',
+          rownames = FALSE,
+          # filter = "top",
+          options = list(pageLength = 5,
+                         scrollX = TRUE,
+                         scrollCollapse = TRUE))
+```
+
+#### RB
+
+Only running backs with at least 100 touches (receptions + rushes) are included.
+
+```{r rb, echo=FALSE, message=FALSE, warning=FALSE}
+rb <- real %>% 
+  filter(Position == "RB",
+         Touches >= 100) %>% 
+  select(Player, Team, `Cap hit`, DYAR, Touches, `DYAR per $1,000`) %>% 
+  arrange(-`DYAR per $1,000`)
+
+datatable(rb, 
+          extensions = 'FixedColumns',
+          rownames = FALSE,
+          # filter = "top",
+          options = list(pageLength = 5,
+                         scrollX = TRUE,
+                         scrollCollapse = TRUE))
+```
+
+#### TE
+
+Only tight ends with at least 25 touches (receptions + rushes) are included.
+
+```{r te, echo=FALSE, message=FALSE, warning=FALSE}
+te <- real %>% 
+  filter(Position == "TE",
+         Touches >= 25) %>% 
+  select(Player, Team, `Cap hit`, DYAR, Touches, `DYAR per $1,000`) %>% 
+  arrange(-`DYAR per $1,000`)
+
+datatable(te, 
+          extensions = 'FixedColumns',
+          rownames = FALSE,
+          # filter = "top",
+          options = list(pageLength = 5,
+                         scrollX = TRUE,
+                         scrollCollapse = TRUE))
+```
+
+#### WR
+
+Only wide receivers with at least 50 touches (receptions + rushes) are included.
+
+```{r wr, echo=FALSE, message=FALSE, warning=FALSE}
+wr <- real %>% 
+  filter(Position == "WR",
+         Touches >= 50) %>% 
+  select(Player, Team, `Cap hit`, DYAR, Touches, `DYAR per $1,000`) %>% 
+  arrange(-`DYAR per $1,000`)
+
+datatable(wr, 
+          extensions = 'FixedColumns',
+          rownames = FALSE,
+          # filter = "top",
+          options = list(pageLength = 5,
+                         scrollX = TRUE,
+                         scrollCollapse = TRUE))
+```
+
+## Where to find value
+
+From the plots above, it's clear that great players don't necessarily cost a team an arm and a leg. This has led to the rise in the present strategy of building a team around a quarterback on a [rookie contract](https://www.sbnation.com/2019/7/1/18684138/nfl-rookie-contract-quarterbacks-playoffs-trend). Because quarterbacks command the largest contracts later on, having even a slightly above average quarterback for cheap provides ample resources for the rest of a team's roster.
+
+However, it does make sense to pay good quarterbacks and wide receivers (and to a lesser degree, tight ends) to keep them, as established players at those position are likelier to outperform cheaper ones. In contrast, there doesn't seem to be anything about a running back's price that predicts his performance. The present aversion to paying running backs seems pretty rational, as even a cheap running back could lead to above average production.
+
+[^1]: We could also consider the cost of other factors like a player's influence on team morale, how his reputation affects a team's bottom-line, and the opportunity cost from not selecting other players at the same position. However, I wanted to constrain this analysis to a player's financial cost, for which there is data.
+[^2]: Alternatively, I could have computed value as the number of dollars it cost for a player to gain 1 DYAR. However, this would have resulted in players with 0 DYAR for the season having infinite value (since DYAR serves as the denominator).
