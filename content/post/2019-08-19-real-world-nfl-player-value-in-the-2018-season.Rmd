@@ -58,7 +58,7 @@ For my analysis, I scraped data of [FootballOutsiders](https://www.footballoutsi
 
 ## Visualizing value
 
-I used the `plotly` library to produce the interactive plots below. Hovering over each point will reveal that player's DYAR and cap hit for the 2018 season (you can also drag a box over a region on each plot you want to zoon in on.
+I used the `plotly` library to produce the interactive plots below. Hovering over each point will reveal that player's DYAR and cap hit for the 2018 season (you can also drag a box over a region on each plot you want to zoom in on).
 
 The plots include regression lines capturing the relationship between players' cap hits and their DYAR. For quarterbacks (QB), cap hit accounts for 22% of the variation in DYAR. For wide receivers (WR), cap hit accounts for 12% of the variation. (By social science standards, these are pretty large effects). For tight ends (TE), cap hit accounts for 5% of the variation; smaller but still statistically significant. In other words, more costly players at these positions tend to contribute more on average.
 
