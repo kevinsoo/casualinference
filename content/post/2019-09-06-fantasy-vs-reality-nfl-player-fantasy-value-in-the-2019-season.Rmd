@@ -1,0 +1,132 @@
+---
+title: 'Fantasy vs. reality: NFL player fantasy value in the 2019 season'
+author: Kevin Soo
+date: '2019-09-06'
+slug: fantasy-vs-reality-nfl-player-fantasy-value-in-the-2019-season
+categories:
+  - R
+tags:
+  - sports
+---
+---
+title: 'Fantasy vs. reality: NFL player fantasy value in the 2018 season'
+author: Kevin Soo
+date: '2019-09-05'
+slug: fantasy-vs-reality-nfl-player-fantasy-value-in-the-2018-season
+categories:
+  - R
+tags:
+  - sports
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load libraries
+library(tidyverse)
+library(plotly)
+library(scales)
+library(rmarkdown)
+
+# Load data
+load(file = "files/real-world-nfl-player-value-in-the-2018-season/real_value_2018.Rda")
+ff <- read_csv("files/fantasy-vs-reality-nfl-player-fantasy-value-in-the-2019-season/ffa_2019_data.csv")
+```
+
+Since writing my [post analyzing real-world NFL player value](https://casualinference.netlify.com/2019/08/19/real-world-nfl-player-value-in-the-2018-season/), I've been waiting for a couple of Fantasy Football leagues I'm in to complete drafting before posting about fantasy value. (Wouldn't want my opponents to think I'm putting more thought into my team than I actually am.)
+
+In that post, I visualized player value -- roughly, the ratio of each player's *Defense-adjusted Yards Above Replacement* ([DYAR](https://www.footballoutsiders.com/info/methods#DYAR)) to their [cap hit](https://bleacherreport.com/articles/1665623-how-does-the-salary-cap-work-in-the-nfl) -- for the 2018 season. This value is based on past performance, and an interesting question is how it relates to future performance.
+
+I won't attempt to predict real-world future performance (an insanely complex task). A more modest goal is seeing if and how 2018 real-world value is related to how football fans *believe* they will perform this year; in other words, their expected fantasy football (FF) value for this year. FF value fluctuates over the season, but just before the season -- when fantasy leagues hold their drafts -- we get a freeze-frame of how the FF-playing public values different players. 
+
+## FF value
+
+FF value at the start of the 2019 season should be determined by a combination of players' prior performances, current context (injuries, trades, etc.) and a whole range of biases based on having been burned by one player or other in some prior FF season (I just can't bring myself to draft [Leonard Fournette](https://blackandteal.com/2019/06/01/three-reasons-jaguars-rb-leonard-fournette-will-bounce-back/) again). 
+
+In the visualization below, I plot each player's *value over replacement* (VOR) against their *average draft position* (ADP) in FF mock drafts completed prior to the season.[^1] VOR is computed based on a weighted average of each player's projected points by several FF analysts and sites, taken from [FantasyFootballAnalytics.net](https://fantasyfootballanalytics.net). Utilizing the [*wisdom-of-the-crowds*](https://en.wikipedia.org/wiki/Wisdom_of_the_crowd) provides a better estimate on average (though admittedly, individual players rarely come close to their season projections).
+
+```{r ffvalue, echo=FALSE, message=FALSE, warning=FALSE}
+# Plot ADP vs. value
+ggplotly(ff %>% 
+      mutate(VOR = round(vor, 2)) %>% 
+      rename(ADP = adp, Risk = risk) %>% 
+      drop_na(ADP) %>% 
+      filter(position %in% c("QB", "RB", "TE", "WR")) %>% 
+      ggplot(aes(x = ADP, y = VOR)) +
+      facet_wrap(~ position, scales = "free") +
+      geom_hline(yintercept = 0, color = "red", linetype = 2) +
+      stat_smooth(method = "lm", formula = "y ~ x", size = .5, se = FALSE) +
+      geom_point(alpha = .5, aes(text = paste0(player, " (", team, ")"), color = Risk)) +
+      theme_minimal() +
+      scale_color_viridis_c() +
+      scale_x_continuous(breaks = seq(12, 168, 12)) +
+      labs(title = "NFL Fantasy Value (2019 season)") +
+      theme(axis.text.x = element_text(size = 6))
+)
+```
+
+
+Generally, a player's ADP should correspond to his value, which can be seen from the decreasing value of later picks at all positions. I've included trend lines, so you can pick out players that have better or worse value than their ADP implies. The plot also displays the average risk associated with each player (capturing the variance in that player's projections by different sources).
+
+## Real-world vs. fantasy
+
+Finally, I wanted to see which positions and players were most over- or undervalued in FF 2019 based on their real-world performance in 2018. For each player with both real-world data from 2018 and FF projections for this year (i.e. excluding rookies and players not making it off draft boards in FF mock drafts this year), I plotted their 2018 real-world rank vs. their 2019 FF rank. I used ranks because value is computed using different scales in the real-world vs. fantasy. 
+
+```{r comparevalue, echo=FALSE, message=FALSE, warning=FALSE}
+compare2 <- ff %>% 
+      rename(FullName = player,
+             Position = position,
+             Team = team) %>% 
+      left_join(select(real, -Position, -Team), by = "FullName") %>% 
+      drop_na(vor, adp, DYAR, CapHit) %>% 
+      mutate(ff_value = vor/adp,
+             real_value = (DYAR/CapHit)) %>% 
+      filter(Position %in% c("QB", "RB", "TE", "WR")) %>% 
+      arrange(-ff_value) %>% 
+      mutate(`FF rank` = row_number()) %>%
+      arrange(-real_value) %>% 
+      mutate(`Real rank` = row_number()) %>% 
+      ungroup()
+
+# Plot
+ggplotly(
+  compare2 %>% 
+    ggplot(aes(x = `Real rank`, y = `FF rank`)) +
+    stat_smooth(se = FALSE, method = "lm", size = .7, aes(color = Position)) +
+    geom_point(alpha = .5, aes(color = Position, text = paste0(FullName, " (", Team, ")"))) +
+    scale_x_reverse() + 
+    scale_y_reverse() +
+    scale_color_viridis_d() +
+    theme(legend.position = 'none') +
+    theme_minimal() +
+    labs(title = "Real world ranks (2018) vs. fantasy ranks (2019)")
+)
+
+# Compute r^2
+# library(broom)
+# tmp <- compare2 %>% 
+#   nest(-Position) %>% 
+#   mutate(fit = map(data, ~ lm(`FF rank` ~ `Real rank`, data = .)),
+#          results = map(fit, glance)) %>% 
+#   unnest(results)
+```
+
+I plotted players from all positions in the same plot so differences in the trends would be visible. However, you can click on a group in the legend to toggle those observations on and off.
+
+#### QBs and WRs
+
+Positive slopes imply that real-world and FF ranks are positively related. Generally, highly ranked players in the real world in 2018 were more highly ranked in FF for 2019. There are strong positive relationships in both quarterback (*R*^2^ = .43) and wide receiver (*R*^2^ = .19) rankings. These imply a somewhat sensible valuation of QBs and WRs in FF based on their real-world value the prior year.
+
+Still, the relationship between real-world and FF ranks for QBs and WRs aren't perfect, so you can pick out players who are relatively more valuable in FF than the real world (above the trend lines) and those more valuable in the real world than in FF (below the trend line). 
+
+#### RBs and TEs
+
+In contrast, there is no relationship between real-world and FF ranks for running backs or tight ends (despite the trends for both groups appearing slightly positive). This means that a player's real-world value does not translate to their FF value the following year. As an example, Carlos Hyde and Jordan Howard had real-world value ranks of 156 and 157, respectively in 2018. Yet, in 2019, Carlos Hyde has a FF value rank of 136, while Jordan Howard is at 66.
+
+## A numbers game
+
+Football lends itself to quantitative analysis, in both the real world and in the realm of fantasy sports. While this has developed my interest in the game, I often feel torn by how it encourages me to [view players primarily as numbers](https://www.washingtonpost.com/news/made-by-history/wp/2017/09/10/the-dark-side-of-fantasy-football/). 
+
+As the 2019 season starts, I'm trying to keep in mind that players are human beings, and [their welfare](https://www.theatlantic.com/sponsored/prudential-against-the-grain/the-nfl-challenge-keeping-gladiators-safe/386/) is infinitely more important than how many points they score for me. Having said that, I'm happy I drafted Ezekiel Elliott in one of my leagues, and even happier he [ended his holdout](https://www.espn.com/nfl/story/_/id/27529067/jerry-jones-pays-ezekiel-elliott-cowboys-win-super-bowl).
+
+[^1]: I collected data up to August 21, 2019. The data does not reflect the drama between then and when the season starts (the holdouts of Ezekiel Elliott and Melvin Gordon, the insanity of Antonio Brown, etc.).
