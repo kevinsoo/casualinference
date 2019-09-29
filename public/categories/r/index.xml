@@ -6,10 +6,20 @@
     <description>Recent content in R on Casual Inference</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 06 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 29 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>W(hat&#39;s the)MATA: DC Metro issues</title>
+      <link>/2019/09/29/w-hat-s-the-mata-dc-metro-issues/</link>
+      <pubDate>Sun, 29 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/09/29/w-hat-s-the-mata-dc-metro-issues/</guid>
+      <description>I moved to the DC Metro area in the middle of the months-long Metro shutdown, giving me an immediate taste of the region’s special relationship with the Washington Metropolitan Area Transit Authority (WMATA). Having lived in cities with varying degrees of public transit options, one long-term project I’d love to tackle is comparing public transit across cities.
+Awhile back, I found a public dataset containing reported Metro issues from April 2012 to November 2016.</description>
+    </item>
     
     <item>
       <title>Fantasy vs. reality: NFL player fantasy value in the 2019 season</title>

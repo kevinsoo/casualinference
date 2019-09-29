@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.54.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>W(hat&#39;s the)MATA: DC Metro issues &middot; Casual Inference</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  
+  <link rel="icons8-scatter-plot-90" sizes="144x144" href="/icons8-scatter-plot-90.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Casual Inference" />
+
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>Casual Inference</h1></a>
+      <p class="lead">
+      Adventures of a Data Scientist <a href="http://twitter.com/civisanalytics">@CivisAnalytics</a><br>Occasional causal inferences
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/categories/"> Categories </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+    </nav>
+    
+    <div>
+        <h3 class="white">Links</h3>
+        <i class="fab fa-twitter fa-fw"></i> <a href="http://twitter.com/kevinwxsoo">Twitter</a><br>
+        <i class="fab fa-github fa-fw"></i> <a href="https://github.com/kevinsoo">GitHub</a><br>
+        <i class="far fa-envelope fa-fw"></i> <a href="mailto:kevinwxsoo@gmail.com?Subject=Hello">Email</a><br>
+        <br>
+    </div>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>W(hat&#39;s the)MATA: DC Metro issues</h1>
+  <time datetime=2019-09-29T00:00:00Z class="post-date">Sun, Sep 29, 2019</time>
+  
+
+
+<p>I moved to the DC Metro area in the middle of the <a href="https://www.washingtonpost.com/local/trafficandcommuting/despite-warnings-and-planning-metro-shutdown-leads-to-commute-meltdown-for-many/2019/05/29/b98302d4-8233-11e9-bce7-40b4105f7ca0_story.html">months-long Metro shutdown</a>, giving me an immediate taste of the region’s special relationship with the Washington Metropolitan Area Transit Authority (WMATA). Having lived in cities with varying degrees of public transit options, one long-term project I’d love to tackle is comparing public transit across cities.</p>
+<p>Awhile back, I found a public <a href="https://www.wmata.com/about/records/public-records.cfm">dataset</a> containing reported Metro issues from April 2012 to November 2016. I had some spare time this week, so I decided to visualize some trends in Metro issues, mainly to force myself to clean up the dataset. Hopefully, I’ll be able to locate similar data for other public transit systems.</p>
+<div id="issues-over-time" class="section level2">
+<h2>Issues over time</h2>
+<p>The following graph displays the total issues in each month contained in the dataset. Since the dataset covers only a few years, it’s hard to discern long-term trends. However, there is some stability in that window; the red line has the most issues in almost every month (it’s the oldest line), followed by the orange line. There are also some changes in that window; the yellow line had the fewest issues up to 2014, after which its issues increased to the blue line’s level. In addition, the silver line was only opened in 2014.</p>
+<p><img src="/post/2019-09-29-w-hat-s-the-mata-dc-metro-issues_files/figure-html/time-1.png" width="672" /></p>
+</div>
+<div id="whats-the-problem" class="section level2">
+<h2>What’s the problem?</h2>
+<p>The following heatmap shows the relative frequencies of different types of problems. The most common problems are general <em>train delays</em> (trains are held up intentionally to adjust the overall schedule) and <em>mechanical</em> failures (trains held up because of malfunctioning parts). In addition, the red line appears to have way more <em>mechanical</em> issues than any other line, as you would expect from it being the oldest line.</p>
+<p><img src="/post/2019-09-29-w-hat-s-the-mata-dc-metro-issues_files/figure-html/problems-1.png" width="672" /></p>
+</div>
+<div id="where-are-the-issues" class="section level2">
+<h2>Where are the issues?</h2>
+<p>The following graph plots the total issues at each station, ordered by position in their respective lines. For all non-red lines, there are generally more issues at the ends of the lines. This is likely where <em>train delays</em> occur, as trains get held up there for schedule adjustments. For the red line, there appear to be generally high numbers of issues across the entire line.</p>
+<p><img src="/post/2019-09-29-w-hat-s-the-mata-dc-metro-issues_files/figure-html/location-1.png" width="672" /></p>
+</div>
+<div id="seasonal-trends" class="section level2">
+<h2>Seasonal trends</h2>
+<p>The timing of issues being reported also reveal expected patterns in public transit use, but it’s unclear how much of this is due to the increased likelihood of an issue being reported vs. the increased ridership causing more issues.</p>
+<p>The first plot displays issues by the hour in the day they were reported, revealing spikes in issues during peak transit hours. The second plot reveals more issues being reported on weekdays compared to weekends. The third plot reveals more issues being reported in the summer months, presumably when there are more tourists (my anecdotal experience confirms this).</p>
+<p><img src="/post/2019-09-29-w-hat-s-the-mata-dc-metro-issues_files/figure-html/trends-1.png" width="672" /></p>
+</div>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

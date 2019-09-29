@@ -1,0 +1,128 @@
+---
+title: 'W(hat''s the)MATA: DC Metro issues'
+author: Kevin Soo
+date: '2019-09-29'
+slug: w-hat-s-the-mata-dc-metro-issues
+categories:
+  - R
+tags:
+  - public
+  - city
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load libraries
+library(tidyverse)
+library(lubridate)
+library(gganimate)
+library(stringr)
+library(plotly)
+library(ggrepel)
+library(cowplot)
+
+# Load data
+df <- read_csv(file = "files/w-hat-s-the-mata-dc-metro-issues/wmata-issues-clean_2012-04_to_2016-11.csv")
+
+# WMATA palette
+wmata <- c("#009CDE", "#00B140", "#ED8B00", "#BF0D3E", "#919D9D", "#FFD100")
+```
+
+I moved to the DC Metro area in the middle of the [months-long Metro shutdown](https://www.washingtonpost.com/local/trafficandcommuting/despite-warnings-and-planning-metro-shutdown-leads-to-commute-meltdown-for-many/2019/05/29/b98302d4-8233-11e9-bce7-40b4105f7ca0_story.html), giving me an immediate taste of the region's special relationship with the Washington Metropolitan Area Transit Authority (WMATA). Having lived in cities with varying degrees of public transit options, one long-term project I'd love to tackle is comparing public transit across cities. 
+
+Awhile back, I found a public [dataset](https://www.wmata.com/about/records/public-records.cfm) containing reported Metro issues from April 2012 to November 2016. I had some spare time this week, so I decided to visualize some trends in Metro issues, mainly to force myself to clean up the dataset. Hopefully, I'll be able to locate similar data for other public transit systems.
+
+## Issues over time
+
+The following graph displays the total issues in each month contained in the dataset. Since the dataset covers only a few years, it's hard to discern long-term trends. However, there is some stability in that window; the red line has the most issues in almost every month (it's the oldest line), followed by the orange line. There are also some changes in that window; the yellow line had the fewest issues up to 2014, after which its issues increased to the blue line's level. In addition, the silver line was only opened in 2014.
+
+```{r time, echo=FALSE, message=FALSE, warning=FALSE}
+# Issues over time
+df %>%
+    group_by(month = floor_date(datetime, "month"), color) %>%
+    count() %>%
+    ungroup() %>%
+    group_by(color) %>%
+    mutate(total = cumsum(n)) %>%
+    ggplot(aes(x = month, y = n)) +
+    geom_point(aes(color = color), alpha = .5) +
+    stat_smooth(aes(color = color, fill = color), alpha = .1, size = 1) +
+    scale_color_manual(values = wmata) +
+    scale_fill_manual(values = wmata) +
+    theme_minimal() +
+    theme(legend.position = "none") +
+    labs(title = "Metro issues over time",
+         x = NULL, y = "Monthly issues")
+```
+
+## What's the problem?
+
+The following heatmap shows the relative frequencies of different types of problems. The most common problems are general *train delays* (trains are held up intentionally to adjust the overall schedule) and *mechanical* failures (trains held up because of malfunctioning parts). In addition, the red line appears to have way more *mechanical* issues than any other line, as you would expect from it being the oldest line.
+
+```{r problems, echo=FALSE, message=FALSE, warning=FALSE}
+# What types of issues?
+df %>% 
+    group_by(color, type) %>% 
+    count() %>% 
+    ggplot(aes(x = color, y = type)) +
+    geom_raster(aes(fill = color, alpha = n)) +
+    scale_fill_manual(values = wmata) +
+    theme_minimal() +
+    theme(legend.position = "none", 
+          panel.grid.major = element_blank()) +
+    labs(title = "Types of issues", x = NULL, y = NULL)
+```
+
+## Where are the issues?
+
+The following graph plots the total issues at each station, ordered by position in their respective lines. For all non-red lines, there are generally more issues at the ends of the lines. This is likely where *train delays* occur, as trains get held up there for schedule adjustments. For the red line, there appear to be generally high numbers of issues across the entire line.
+
+```{r location, echo=FALSE, message=FALSE, warning=FALSE, fig.height=10}
+# Where are the issues?
+df %>% 
+    group_by(color, station, order) %>% 
+    count() %>% 
+    ggplot(aes(x = fct_reorder(station, order), y = n, height = n, group = color, fill = color)) +
+    facet_wrap(~ color, scales = "free_x", ncol = 2) +
+    geom_area(alpha = .7, aes(fill = color), color = "black") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1, size = 6),
+          legend.position = "none") +
+    scale_fill_manual(values = wmata) +
+    labs(x = NULL, y = NULL)
+```
+
+## Seasonal trends
+
+The timing of issues being reported also reveal expected patterns in public transit use, but it's unclear how much of this is due to the increased likelihood of an issue being reported vs. the increased ridership causing more issues. 
+
+The first plot displays issues by the hour in the day they were reported, revealing spikes in issues during peak transit hours. The second plot reveals more issues being reported on weekdays compared to weekends. The third plot reveals more issues being reported in the summer months, presumably when there are more tourists (my anecdotal experience confirms this).
+
+```{r trends, echo=FALSE, message=FALSE, warning=FALSE}
+# What day and what time do issues occur?
+a <- df %>% 
+    ggplot(aes(x = hour)) +
+    geom_histogram(aes(fill = color), binwidth = 1) +
+    scale_fill_manual(values = wmata) +
+    scale_x_continuous(breaks = seq(0, 24, 4), minor_breaks = seq(0, 24, 1)) +
+    theme_minimal() +
+    theme(legend.position = "none") +
+    labs(title = "By hour", x = "Hour", y = "Issues")
+b <- df %>% 
+    ggplot(aes(x = factor(wday, levels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")))) +
+    geom_histogram(aes(fill = color), binwidth = 1, stat = "count") +
+    scale_fill_manual(values = wmata) +
+    theme_minimal() +
+    theme(legend.position = "none") +
+    labs(title = "By day", x = "Day", y = "Issues")
+c <- df %>% 
+    ggplot(aes(x = factor(month))) +
+    geom_histogram(aes(fill = color), binwidth = 1, stat = "count") +
+    scale_fill_manual(values = wmata) +
+    scale_x_discrete(breaks = 1:12) +
+    theme_minimal() +
+    theme(legend.position = "none") +
+    labs(title = "By month", x = "Month", y = "Issues")
+plot_grid(a, b, c, ncol = 3)
+```
