@@ -8,7 +8,7 @@ As a graduate student, I worked with [Benjamin Rottman](https://www.lrdc.pitt.ed
 ### Publications
 
 * Soo, K. W. & Rottman, B. M. (in preparation). The role of granularity in causal learning.
-* Soo, K. W. & Rottman, B. M. (2020). Distinguishing causation from correlation: Causal learning from time-series graphs with trends. *Cognition, 195* (10479), 1-6. [dx.doi.org/10.1016/j.cognition.2019.104079](https://www.sciencedirect.com/science/article/pii/S0010027719302525?via%3Dihub)
+* Soo, K. W. & Rottman, B. M. (2020). Distinguishing causation from correlation: Causal learning from time-series graphs with trends. *Cognition, 195* (10479), 1-6. [dx.doi.org/10.1016/j.cognition.2019.104079](https://www.sciencedirect.com/science/article/pii/S0010027719302525?via%3Dihub) [[pdf]](/files/SooRottman_TimeSeriesGraphs.pdf)
 * Soo, K. W. & Rottman, B. M. (2018). Causal strength induction from time series data. *Journal of Experimental Psychology: General, 147* (4), 485-513. [dx.doi.org/10.1037/xge0000423](https://dx.doi.org/10.1037/xge0000423) [[pdf]](/files/SooRottman_CausalInductionTimeSeries.pdf)
 * Soo, K. W. & Rottman, B. M. (2018). Switch rates do not influence weighting of rare events in decisions from experience, but optional stopping does. *Journal of Behavioral Decision Making, 31* (5), 644-661. [dx.doi.org/10.1002/bdm.2080](https://dx.doi.org/10.1002/bdm.2080) [[pdf]](/files/SooRottman_SwitchRatesOptionalStopping.pdf)
 * Soo, K. W. & Rottman, B. M. (2018). Causal learning from trending time series. In T. T. Rogers, M. Rau, X. Zhu, & C. W. Kalish (Eds.), *Proceedings of the 40th Annual Conference of the Cognitive Science Society* (pp. 2521-2526). Austin, TX: Cognitive Science Society. [[pdf]](/files/2018-cogsci.pdf)
