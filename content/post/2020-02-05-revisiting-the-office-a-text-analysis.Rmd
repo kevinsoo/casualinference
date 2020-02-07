@@ -47,9 +47,7 @@ Recently the `schrute` package was released, containing scripts of every episode
 ```{r df, echo=FALSE, message=FALSE, warning=FALSE}
 # Get smaller table of episode 1
 df %>% 
-  select(season_episode, speech, character, text)
-
-# Print table
+  select(speech, character, text)
 ```
 
 ## Speaking time
@@ -64,13 +62,16 @@ words <- df %>%
     anti_join(stop_words, by = "word")
 
 # Get main characters to plot
-chars <- c("Michael", "Dwight", "Jim", "Pam", "Andy", "Erin", "Ryan", "Holly")
+chars <- c("Michael", "Dwight", "Jim", 
+           "Pam", "Andy", "Erin", 
+           "Ryan", "Holly")
 
 # Count proportion of words by each character in an episode
 speakers <- words %>%
     group_by(season_episode) %>% 
     mutate(total_words = n()) %>% 
-    group_by(season_episode, season, episode, episode_name, character, total_words) %>% 
+    group_by(season_episode, season, episode, 
+             episode_name, character, total_words) %>% 
     summarise(words = n()) %>% 
     ungroup() %>% 
     mutate(prop_words = words / total_words,
@@ -85,9 +86,11 @@ speakers %>%
     mutate(character = factor(character, levels = chars)) %>%
     filter(!(character == "Michael" & season == 9)) %>%
     ggplot(aes(x = id, y = prop_words)) +
-    geom_vline(data = new, aes(xintercept = new), linetype = "dashed", color = "grey") +
+    geom_vline(data = new, aes(xintercept = new), 
+               linetype = "dashed", color = "grey") +
     geom_point(aes(color = character), alpha = .1) +
-    stat_smooth(aes(group = character, color = character), se = FALSE) +
+    stat_smooth(aes(group = character, color = character), 
+                se = FALSE) +
     geom_vline(xintercept = 136) +
     geom_label(x = 136, y = .5, label = "Goodbye\nMichael") +
     scale_color_viridis_d() +
@@ -175,7 +178,8 @@ tmp <- df %>%
 tmp %>% 
     group_by(character) %>% 
     mutate(M = mean(score)) %>% 
-    ggplot(aes(x = score, y = fct_reorder(character, M), fill = character)) +
+    ggplot(aes(x = score, y = fct_reorder(character, M), 
+               fill = character)) +
     geom_density_ridges(stat = "binline", binwidth = 1) +
     scale_fill_viridis_d(guide = "none") +
     scale_x_continuous(breaks = seq(-5, 5, by = 1), 
@@ -184,7 +188,8 @@ tmp %>%
     theme_minimal() +
     labs(y = "Speaker", x = "Sentiment", 
          title = "Sentiment in The Office",
-         subtitle = "Distribution of sentiment in words spoken by main characters")
+         subtitle = "Distribution of sentiment in 
+         words spoken by main characters")
 ```
 
 Most characters have pretty similar profiles, except for Stanley, whose speech contains way more extremely negative words and very few extremely positive words. He says "damn" (sentiment score of -4) 11 times, which is pretty frequent considering he's a secondary character.
@@ -235,7 +240,8 @@ sentiment %>%
     labs(x = "Referent", y = "Speaker",
          color = "Average\nsentiment", size = "Utterances",
          title = "Feelings for Office co-workers",
-         caption = "Note: Speaker-referent\npairs with ≥ 10 utterances",
+         caption = "Note: Speaker-referent\npairs 
+         with ≥ 10 utterances",
          subtitle = "Average sentiment of utterances about others")
 ```
 
@@ -248,7 +254,8 @@ We can get a simpler view of this analysis by collapsing the utterances across s
 sentiment %>% 
     group_by(referent) %>% 
     mutate(M = mean(sentiment)) %>% 
-    ggplot(aes(x = sentiment, y = fct_reorder(referent, M), fill = referent)) +
+    ggplot(aes(x = sentiment, y = fct_reorder(referent, M), 
+               fill = referent)) +
     geom_density_ridges() +
     geom_vline(xintercept = 0, linetype = "dashed") +
     scale_fill_viridis_d(guide = FALSE) +
@@ -258,7 +265,8 @@ sentiment %>%
     theme_minimal() +
     labs(y = "Referent", x = "Sentiment", 
          title = "The Office favorites",
-         subtitle = "Average sentiments of utterances involving main characters")
+         subtitle = "Average sentiments of 
+         utterances involving main characters")
 
 ```
 

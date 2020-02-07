@@ -63,44 +63,50 @@
   <time datetime=2020-02-05T00:00:00Z class="post-date">Wed, Feb 5, 2020</time>
   
 
+<p>I&rsquo;m casually rewatching The Office as my <em>I need something uninvolved to half-occupy my brain for 20 minutes</em> show. Its been almost seven years since the last episode aired, but I still quote it with my closest friends and family &ndash; such was its personal and cultural significance. It&rsquo;s aged like high school: I look back with fondness at the familiar jokes, but there&rsquo;s also a sense that it was a time we have outgrown. I believe showrunner <a href="https://www.theringer.com/2016/9/19/16039458/how-to-make-a-heavenly-network-sitcom-in-2016-661c50df10f4">Mike Schur</a> (also, Dwight&rsquo;s cousin Mose) has gone on to write far more artistically significant shows.</p>
 
-<p>I’m casually rewatching The Office as my <em>I need something uninvolved to half-occupy my brain for 20 minutes</em> show. Its been almost seven years since the last episode aired, but I still quote it with my closest friends and family – such was its personal and cultural significance. It’s aged like high school: I look back with fondness at the familiar jokes, but there’s also a sense that it was a time we have outgrown. I believe showrunner <a href="https://www.theringer.com/2016/9/19/16039458/how-to-make-a-heavenly-network-sitcom-in-2016-661c50df10f4">Mike Schur</a> (also, Dwight’s cousin Mose) has gone on to write far more artistically significant shows.</p>
-<div id="exploring-the-scripts" class="section level2">
-<h2>Exploring the scripts</h2>
-<p>Recently the <code>schrute</code> package was released, containing scripts of every episode of The Office. I decided to dig into the text. I started by cleaning up the data a little, producing the following data frame. In the following analyses, I explore some patterns in the data that might (or might not) comport with the average viewer’s memory or perception of the show.</p>
+<h2 id="exploring-the-scripts">Exploring the scripts</h2>
+
+<p>Recently the <code>schrute</code> package was released, containing scripts of every episode of The Office. I decided to dig into the text. I started by cleaning up the data a little, producing the following data frame. In the following analyses, I explore some patterns in the data that might (or might not) comport with the average viewer&rsquo;s memory or perception of the show.</p>
+
 <pre><code>## # A tibble: 55,130 x 4
 ## # Groups:   season_episode [186]
 ##    season_episode speech character text                                    
 ##    &lt;chr&gt;           &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;                                   
 ##  1 s01e01              1 Michael   All right Jim. Your quarterlies look ve…
-##  2 s01e01              2 Jim       Oh, I told you. I couldn&#39;t close it. So…
-##  3 s01e01              3 Michael   So you&#39;ve come to the master for guidan…
+##  2 s01e01              2 Jim       Oh, I told you. I couldn't close it. So…
+##  3 s01e01              3 Michael   So you've come to the master for guidan…
 ##  4 s01e01              4 Jim       Actually, you called me in here, but ye…
 ##  5 s01e01              5 Michael   All right. Well, let me show you how it…
-##  6 s01e01              6 Michael   So that&#39;s the way it&#39;s done.            
-##  7 s01e01              7 Michael   I&#39;ve, uh, I&#39;ve been at Dunder Mifflin f…
-##  8 s01e01              8 Pam       Well. I don&#39;t know.                     
-##  9 s01e01              9 Michael   &quot;If you think she&#39;s cute now, you shoul…
+##  6 s01e01              6 Michael   So that's the way it's done.            
+##  7 s01e01              7 Michael   I've, uh, I've been at Dunder Mifflin f…
+##  8 s01e01              8 Pam       Well. I don't know.                     
+##  9 s01e01              9 Michael   &quot;If you think she's cute now, you shoul…
 ## 10 s01e01             10 Pam       What?                                   
-## # … with 55,120 more rows</code></pre>
-</div>
-<div id="speaking-time" class="section level2">
-<h2>Speaking time</h2>
-<p>The simplest analysis is to evaluate how much each character speaks. To keep it from getting too cluttered, I filtered the data to a smaller subset of characters to show some trends over time. The following code computes the percentage of an episode’s dialogue each character spoke, and visualizes them with trend lines.</p>
-<pre class="r"><code># Unnest words
+## # … with 55,120 more rows
+</code></pre>
+
+<h2 id="speaking-time">Speaking time</h2>
+
+<p>The simplest analysis is to evaluate how much each character speaks. To keep it from getting too cluttered, I filtered the data to a smaller subset of characters to show some trends over time. The following code computes the percentage of an episode&rsquo;s dialogue each character spoke, and visualizes them with trend lines.</p>
+
+<pre><code class="language-r"># Unnest words
 words &lt;- df %&gt;% 
     group_by(season_episode) %&gt;% 
     unnest_tokens(word, text) %&gt;% 
     anti_join(stop_words, by = &quot;word&quot;)
 
 # Get main characters to plot
-chars &lt;- c(&quot;Michael&quot;, &quot;Dwight&quot;, &quot;Jim&quot;, &quot;Pam&quot;, &quot;Andy&quot;, &quot;Erin&quot;, &quot;Ryan&quot;, &quot;Holly&quot;)
+chars &lt;- c(&quot;Michael&quot;, &quot;Dwight&quot;, &quot;Jim&quot;, 
+           &quot;Pam&quot;, &quot;Andy&quot;, &quot;Erin&quot;, 
+           &quot;Ryan&quot;, &quot;Holly&quot;)
 
 # Count proportion of words by each character in an episode
 speakers &lt;- words %&gt;%
     group_by(season_episode) %&gt;% 
     mutate(total_words = n()) %&gt;% 
-    group_by(season_episode, season, episode, episode_name, character, total_words) %&gt;% 
+    group_by(season_episode, season, episode, 
+             episode_name, character, total_words) %&gt;% 
     summarise(words = n()) %&gt;% 
     ungroup() %&gt;% 
     mutate(prop_words = words / total_words,
@@ -115,9 +121,11 @@ speakers %&gt;%
     mutate(character = factor(character, levels = chars)) %&gt;%
     filter(!(character == &quot;Michael&quot; &amp; season == 9)) %&gt;%
     ggplot(aes(x = id, y = prop_words)) +
-    geom_vline(data = new, aes(xintercept = new), linetype = &quot;dashed&quot;, color = &quot;grey&quot;) +
+    geom_vline(data = new, aes(xintercept = new), 
+               linetype = &quot;dashed&quot;, color = &quot;grey&quot;) +
     geom_point(aes(color = character), alpha = .1) +
-    stat_smooth(aes(group = character, color = character), se = FALSE) +
+    stat_smooth(aes(group = character, color = character), 
+                se = FALSE) +
     geom_vline(xintercept = 136) +
     geom_label(x = 136, y = .5, label = &quot;Goodbye\nMichael&quot;) +
     scale_color_viridis_d() +
@@ -127,14 +135,18 @@ speakers %&gt;%
     labs(title = &quot;Main speakers in The Office&quot;,
          subtitle = &quot;Proportion of words by characters over time&quot;,
          x = &quot;Season &amp; episode&quot;, y = &quot;Proportion of words&quot;,
-         color = NULL)</code></pre>
-<p><img src="/post/2020-02-05-revisiting-the-office-a-text-analysis_files/figure-html/screentime-1.png" width="768" /></p>
-<p>Michael Scott obviously has the most dialogue, but it seems other characters took a larger chunk of the dialogue over time up to when Michael left in season seven.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> After Michael left, Dwight and Andy got bumps in their speaking time. Jim, Pam, and Ryan have steady amounts of dialogue throughout, but Jim and Pam are obviously tied together and play bigger parts. Additionally, Holly had significant dialogue for a short stretch, but tapered off in a way that suggests she was written in to allow Michael’s exit from the show. So far, there are no surprises.</p>
-</div>
-<div id="name-calling" class="section level2">
-<h2>Name-calling</h2>
-<p>My first thought was to look at the interactions between characters (e.g., which characters share screen-time together), but the <code>schrute</code> dataset doesn’t have an indicator for scenes. I did the next best thing I could think of: analyze when characters called other characters by name. This is an obviously limited view – people often speak to or about others without mentioning anyone by name – but all things being equal this might still reveal patterns of relationships. The following plot visualizes the number of times each character (the speaker) uses the name of another character (the referent).<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
-<pre class="r"><code># Characters to include
+         color = NULL)
+</code></pre>
+
+<p><img src="2020-02-05-revisiting-the-office-a-text-analysis_files/figure-html/screentime-1.png" width="768" /></p>
+
+<p>Michael Scott obviously has the most dialogue, but it seems other characters took a larger chunk of the dialogue over time up to when Michael left in season seven.<sup class="footnote-ref" id="fnref:1"><a href="#fn:1">1</a></sup> After Michael left, Dwight and Andy got bumps in their speaking time. Jim, Pam, and Ryan have steady amounts of dialogue throughout, but Jim and Pam are obviously tied together and play bigger parts. Additionally, Holly had significant dialogue for a short stretch, but tapered off in a way that suggests she was written in to allow Michael&rsquo;s exit from the show. So far, there are no surprises.</p>
+
+<h2 id="name-calling">Name-calling</h2>
+
+<p>My first thought was to look at the interactions between characters (e.g., which characters share screen-time together), but the <code>schrute</code> dataset doesn&rsquo;t have an indicator for scenes. I did the next best thing I could think of: analyze when characters called other characters by name. This is an obviously limited view &ndash; people often speak to or about others without mentioning anyone by name &ndash; but all things being equal this might still reveal patterns of relationships. The following plot visualizes the number of times each character (the speaker) uses the name of another character (the referent).<sup class="footnote-ref" id="fnref:2"><a href="#fn:2">2</a></sup></p>
+
+<pre><code class="language-r"># Characters to include
 chars &lt;- c(&quot;Michael&quot;, &quot;Dwight&quot;, &quot;Jim&quot;, &quot;Pam&quot;, 
            &quot;Andy&quot;, &quot;Erin&quot;, &quot;Ryan&quot;, &quot;Kelly&quot;, 
            &quot;Jan&quot;, &quot;Toby&quot;, &quot;Darryl&quot;, &quot;Stanley&quot;, 
@@ -169,20 +181,25 @@ refs %&gt;%
     labs(title = &quot;Name-calling in The Office&quot;,
          subtitle = &quot;Number of mentions by lead characters&quot;,
          caption = &quot;Note: Color represents\nlog-transformed mentions&quot;,
-         x = &quot;Referent&quot;, y = &quot;Speaker&quot;, fill = &quot;Mentions&quot;)</code></pre>
-<p><img src="/post/2020-02-05-revisiting-the-office-a-text-analysis_files/figure-html/namecalling-1.png" width="672" /></p>
+         x = &quot;Referent&quot;, y = &quot;Speaker&quot;, fill = &quot;Mentions&quot;)
+</code></pre>
+
+<p><img src="2020-02-05-revisiting-the-office-a-text-analysis_files/figure-html/namecalling-1.png" width="672" /></p>
+
 <p>A few interesting observations (many of which will likely confirm the impression viewers have):</p>
+
 <ul>
-<li>The main characters – Michael, Dwight, Jim, and Pam – frequently reference each other, but generally reference others more than average (probably a function of having more dialogue in general).</li>
+<li>The main characters &ndash; Michael, Dwight, Jim, and Pam &ndash; frequently reference each other, but generally reference others more than average (probably a function of having more dialogue in general).</li>
 <li>Romantically-paired characters (Ryan &amp; Kelly, Dwight &amp; Angela, Andy &amp; Erin) tend to mention each other more than average.</li>
 <li>Some clusters of characters who interact frequently (e.g., the accountants) also mention each other more than average.</li>
-<li>It’s also an interesting way of seeing which characters had little overlap, and never mentioned each other.</li>
+<li>It&rsquo;s also an interesting way of seeing which characters had little overlap, and never mentioned each other.</li>
 </ul>
-</div>
-<div id="office-feelings" class="section level2">
-<h2>Office feelings</h2>
-<p>One more simple thing I thought to analyze was the sentiment of each character’s dialogue. The <code>tidytext</code> library contains a sentiment corpus by <a href="https://arxiv.org/abs/1103.2903">Finn Årup Nielsen</a> that rates 2,476 words on a scale from -5 (very negative) to +5 (very positive). To look at the overall positivity/negativity of each character’s speech, I plotted the distribution of words by sentiment, with the characters ordered from most positive to most negative on average.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
-<pre class="r"><code># Characters to include
+
+<h2 id="office-feelings">Office feelings</h2>
+
+<p>One more simple thing I thought to analyze was the sentiment of each character&rsquo;s dialogue. The <code>tidytext</code> library contains a sentiment corpus by <a href="https://arxiv.org/abs/1103.2903">Finn Årup Nielsen</a> that rates 2,476 words on a scale from -5 (very negative) to +5 (very positive). To look at the overall positivity/negativity of each character&rsquo;s speech, I plotted the distribution of words by sentiment, with the characters ordered from most positive to most negative on average.<sup class="footnote-ref" id="fnref:3"><a href="#fn:3">3</a></sup></p>
+
+<pre><code class="language-r"># Characters to include
 chars &lt;- c(&quot;Michael&quot;, &quot;Dwight&quot;, &quot;Jim&quot;, &quot;Pam&quot;, 
            &quot;Andy&quot;, &quot;Erin&quot;, &quot;Ryan&quot;, &quot;Kelly&quot;, 
            &quot;Jan&quot;, &quot;Toby&quot;, &quot;Darryl&quot;, &quot;Stanley&quot;, 
@@ -200,7 +217,8 @@ tmp &lt;- df %&gt;%
 tmp %&gt;% 
     group_by(character) %&gt;% 
     mutate(M = mean(score)) %&gt;% 
-    ggplot(aes(x = score, y = fct_reorder(character, M), fill = character)) +
+    ggplot(aes(x = score, y = fct_reorder(character, M), 
+               fill = character)) +
     geom_density_ridges(stat = &quot;binline&quot;, binwidth = 1) +
     scale_fill_viridis_d(guide = &quot;none&quot;) +
     scale_x_continuous(breaks = seq(-5, 5, by = 1), 
@@ -209,11 +227,17 @@ tmp %&gt;%
     theme_minimal() +
     labs(y = &quot;Speaker&quot;, x = &quot;Sentiment&quot;, 
          title = &quot;Sentiment in The Office&quot;,
-         subtitle = &quot;Distribution of sentiment in words spoken by main characters&quot;)</code></pre>
-<p><img src="/post/2020-02-05-revisiting-the-office-a-text-analysis_files/figure-html/sentimentspeech-1.png" width="672" /></p>
-<p>Most characters have pretty similar profiles, except for Stanley, whose speech contains way more extremely negative words and very few extremely positive words. He says “damn” (sentiment score of -4) 11 times, which is pretty frequent considering he’s a secondary character.</p>
+         subtitle = &quot;Distribution of sentiment in 
+         words spoken by main characters&quot;)
+</code></pre>
+
+<p><img src="2020-02-05-revisiting-the-office-a-text-analysis_files/figure-html/sentimentspeech-1.png" width="672" /></p>
+
+<p>Most characters have pretty similar profiles, except for Stanley, whose speech contains way more extremely negative words and very few extremely positive words. He says &ldquo;damn&rdquo; (sentiment score of -4) 11 times, which is pretty frequent considering he&rsquo;s a secondary character.</p>
+
 <p>My wife suggested an interesting analysis: What sentiment do characters have when speaking about other characters? This combines the sentiment analysis with the name-calling analysis above. To do this, I picked out utterances by each character that referenced other characters, and calculated the total sentiment of words in that utterance (e.g., when Michael mentions Dwight by name, he often insults him as well, using words with negative sentiment). The following plot visualizes the average sentiment of speech made by each character (the speaker) when referring about another character (the referent), with the size of the points representing the number of utterances (I only included combinations with ≥ 10 utterances).</p>
-<pre class="r"><code># Unnest words
+
+<pre><code class="language-r"># Unnest words
 # Michael is sometimes referred to as Mike
 tmp &lt;- df %&gt;% 
     group_by(season, episode) %&gt;% 
@@ -256,16 +280,23 @@ sentiment %&gt;%
     labs(x = &quot;Referent&quot;, y = &quot;Speaker&quot;,
          color = &quot;Average\nsentiment&quot;, size = &quot;Utterances&quot;,
          title = &quot;Feelings for Office co-workers&quot;,
-         caption = &quot;Note: Speaker-referent\npairs with ≥ 10 utterances&quot;,
-         subtitle = &quot;Average sentiment of utterances about others&quot;)</code></pre>
-<p><img src="/post/2020-02-05-revisiting-the-office-a-text-analysis_files/figure-html/sentimentchars-1.png" width="672" /></p>
-<p>From this, most characters seem to have pretty average speech when referring to other characters, although from my knowledge of the show, this is probably because characters alternate between saying positive and negative things towards others (rather than consistently using neutral words). The main points of interest are speaker-referent combinations with exceptionally positive speech (e.g. Ryan to Jim, Michael to Kelly, Andy to Kevin), which reminds me that a weakness of this kind of simple sentiment analysis is that it doesn’t detect sarcasm. Speaker-referent pairs with extremely negative speech make more apparent sense to viewers: Dwight to Kelly, Oscar to Angela, and of course, Michael to Toby.</p>
+         caption = &quot;Note: Speaker-referent\npairs 
+         with ≥ 10 utterances&quot;,
+         subtitle = &quot;Average sentiment of utterances about others&quot;)
+</code></pre>
+
+<p><img src="2020-02-05-revisiting-the-office-a-text-analysis_files/figure-html/sentimentchars-1.png" width="672" /></p>
+
+<p>From this, most characters seem to have pretty average speech when referring to other characters, although from my knowledge of the show, this is probably because characters alternate between saying positive and negative things towards others (rather than consistently using neutral words). The main points of interest are speaker-referent combinations with exceptionally positive speech (e.g. Ryan to Jim, Michael to Kelly, Andy to Kevin), which reminds me that a weakness of this kind of simple sentiment analysis is that it doesn&rsquo;t detect sarcasm. Speaker-referent pairs with extremely negative speech make more apparent sense to viewers: Dwight to Kelly, Oscar to Angela, and of course, Michael to Toby.</p>
+
 <p>We can get a simpler view of this analysis by collapsing the utterances across speakers, and simply show for each character as a referent, the sentiment of speech about them from all speakers.</p>
-<pre class="r"><code># Plot
+
+<pre><code class="language-r"># Plot
 sentiment %&gt;% 
     group_by(referent) %&gt;% 
     mutate(M = mean(sentiment)) %&gt;% 
-    ggplot(aes(x = sentiment, y = fct_reorder(referent, M), fill = referent)) +
+    ggplot(aes(x = sentiment, y = fct_reorder(referent, M), 
+               fill = referent)) +
     geom_density_ridges() +
     geom_vline(xintercept = 0, linetype = &quot;dashed&quot;) +
     scale_fill_viridis_d(guide = FALSE) +
@@ -275,16 +306,24 @@ sentiment %&gt;%
     theme_minimal() +
     labs(y = &quot;Referent&quot;, x = &quot;Sentiment&quot;, 
          title = &quot;The Office favorites&quot;,
-         subtitle = &quot;Average sentiments of utterances involving main characters&quot;)</code></pre>
-<p><img src="/post/2020-02-05-revisiting-the-office-a-text-analysis_files/figure-html/sentimentreferent-1.png" width="672" /></p>
+         subtitle = &quot;Average sentiments of 
+         utterances involving main characters&quot;)
+</code></pre>
+
+<p><img src="2020-02-05-revisiting-the-office-a-text-analysis_files/figure-html/sentimentreferent-1.png" width="672" /></p>
+
 <p>Note who is at the bottom. Oh Toby, why are you the way that you are?</p>
-</div>
 <div class="footnotes">
+
 <hr />
+
 <ol>
-<li id="fn1"><p>It’s pretty widely acknowledged that the show’s quality declined over time, and I do find later seasons (without Michael) to be kind of a slog. But one indicator of this I’ve realized in rewatching The Office is that most of the most quotable lines are heavily concentrated in the first couple of seasons! The writers peaked early with the memorable dialogue.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Since only a few character-referent combinations had a high number of mentions, I visualized <span class="math inline">\(log(mentions)\)</span>, to allow greater discriminability between values in the lower end of the scale.<a href="#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p>The majority of each character’s words are not contained in the corpus, and can be considered “neutral” (a rating of zero).<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn:1">It&rsquo;s pretty widely acknowledged that the show&rsquo;s quality declined over time, and I do find later seasons (without Michael) to be kind of a slog. But one indicator of this I&rsquo;ve realized in rewatching The Office is that most of the most quotable lines are heavily concentrated in the first couple of seasons! The writers peaked early with the memorable dialogue.
+ <a class="footnote-return" href="#fnref:1"><sup>[return]</sup></a></li>
+<li id="fn:2">Since only a few character-referent combinations had a high number of mentions, I visualized $log(mentions)$, to allow greater discriminability between values in the lower end of the scale.
+ <a class="footnote-return" href="#fnref:2"><sup>[return]</sup></a></li>
+<li id="fn:3">The majority of each character&rsquo;s words are not contained in the corpus, and can be considered &ldquo;neutral&rdquo; (a rating of zero).
+ <a class="footnote-return" href="#fnref:3"><sup>[return]</sup></a></li>
 </ol>
 </div>
 
