@@ -47,6 +47,7 @@ Recently the `schrute` package was released, containing scripts of every episode
 ```{r df, echo=FALSE, message=FALSE, warning=FALSE}
 # Get smaller table of episode 1
 df %>% 
+  ungroup() %>% 
   select(speech, character, text)
 ```
 
