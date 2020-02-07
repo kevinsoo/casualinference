@@ -86,7 +86,7 @@
     <item>
       <title>Pop Culture</title>
       <link>/tags/pop-culture/</link>
-      <pubDate>Wed, 08 May 2019 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 05 Feb 2020 00:00:00 +0000</pubDate>
       
       <guid>/tags/pop-culture/</guid>
       <description></description>
@@ -131,7 +131,7 @@
     <item>
       <title>Text Analysis</title>
       <link>/tags/text-analysis/</link>
-      <pubDate>Wed, 24 Jul 2019 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 05 Feb 2020 00:00:00 +0000</pubDate>
       
       <guid>/tags/text-analysis/</guid>
       <description></description>
@@ -143,6 +143,15 @@
       <pubDate>Tue, 11 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/tidy-tuesday/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tv</title>
+      <link>/tags/tv/</link>
+      <pubDate>Wed, 05 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/tv/</guid>
       <description></description>
     </item>
     
