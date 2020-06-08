@@ -1,0 +1,27 @@
+---
+title: How to interpret statistical models
+author: Kevin Soo
+date: '2020-06-08'
+slug: how-to-interpret-statistical-models
+categories:
+  - General
+tags:
+  - general
+  - covid19
+---
+
+In my work as a data scientist at [Civis Analytics](https://www.civisanalytics.com/), I often have to explain the nuances of statistical models to clients without technical backgrounds. 
+
+With the recent Covid-19 pandemic, there has been a proliferation of epidemiological data and models being discussed online. Since public sector agencies need to make sense of these models, I wrote [a short explainer (published by CivStart)](https://www.civstart.org/post/covid-19-data-models-guide-public-sector-officials) for public sector officials on how to interpret Covid-19 models they might read about. My hope was that this would help them avoid misinterpretations of modeling results.
+
+The full article is linked above, but here is a concise checklist (taken from the post) of things to consider when trying to understand reporting about statistical models:
+
+> A good model should meet all of the criteria below. A negative answer on one isn’t fatal, but a model that fails on multiple counts warrants extra skepticism.*
+>
+> 1. Is the model’s methodology clear? Even if the details are too technical to fully grasp, there should be a clear description of how the data is used to generate projections.
+>
+> 2. Have the modelers specified the data used by the model? Check if others have reported any issues with the dataset – perhaps it is incomplete, unreliable, or contains bias (does the data represent everyone of interest in your community? Is the sample size large enough?)
+>
+> 3. Have the modelers specified the assumptions made by their model? Perhaps a model assumes perfect adherence to social distancing across an entire state. Any assumptions in the model should be reasonable.
+>
+> 4. Has the data and code behind the model been released so others can replicate and check their work?
