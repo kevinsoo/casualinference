@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>General on Casual Inference</title>
-    <link>/categories/general/</link>
-    <description>Recent content in General on Casual Inference</description>
+    <title>Covid19 on Casual Inference</title>
+    <link>/tags/covid19/</link>
+    <description>Recent content in Covid19 on Casual Inference</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 08 Jun 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/categories/general/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/covid19/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,16 +19,6 @@
       <guid>/2020/06/08/how-to-interpret-statistical-models/</guid>
       <description>In my work as a data scientist at Civis Analytics, I often have to explain the nuances of statistical models to clients without technical backgrounds.
 With the recent Covid-19 pandemic, there has been a proliferation of epidemiological data and models being discussed online. Since public sector agencies need to make sense of these models, I wrote a short explainer (published by CivStart) for public sector officials on how to interpret Covid-19 models they might read about.</description>
-    </item>
-    
-    <item>
-      <title>Hello (again) world</title>
-      <link>/2019/04/01/hello-again-world/</link>
-      <pubDate>Mon, 01 Apr 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/04/01/hello-again-world/</guid>
-      <description>For the last few months, I’ve been working almost exclusively on my dissertation and other academic research. Great news: I graduated! In July, I’ll be starting a position as a Data Scientist at Civis Analytics.
-I figured it was time to get back into the habit of writing about side-projects, which would also give me the opportunity to learn and practice new computational methods. I intend to use this blog as a journal to keep track of cool things I’m learning (both methods and insights from the data I analyze).</description>
     </item>
     
   </channel>

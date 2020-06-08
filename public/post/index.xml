@@ -6,10 +6,20 @@
     <description>Recent content in Posts on Casual Inference</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 05 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 08 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How to interpret statistical models</title>
+      <link>/2020/06/08/how-to-interpret-statistical-models/</link>
+      <pubDate>Mon, 08 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/06/08/how-to-interpret-statistical-models/</guid>
+      <description>In my work as a data scientist at Civis Analytics, I often have to explain the nuances of statistical models to clients without technical backgrounds.
+With the recent Covid-19 pandemic, there has been a proliferation of epidemiological data and models being discussed online. Since public sector agencies need to make sense of these models, I wrote a short explainer (published by CivStart) for public sector officials on how to interpret Covid-19 models they might read about.</description>
+    </item>
     
     <item>
       <title>Revisiting The Office: A text analysis</title>
