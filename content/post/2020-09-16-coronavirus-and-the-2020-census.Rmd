@@ -16,7 +16,7 @@ In the best of times, the census is a challenging logistical operation to execut
 
 As part of my work, I analyzed the Census 2020 self-response rates together with Covid-19 case-load data to identify hotspots that still required substantial in-person enumeration. These areas pose a huge challenge to getting everyone counted properly. This work got mentioned in a [New York Times article](https://www.nytimes.com/2020/08/24/us/census-bureau.html) on August 24, 2020. It featured a map based on my analysis!
 
-IMAGE HERE
+![](/post/2020-09-16-coronavirus-and-the-2020-census_files/coronavirus-census.png){width=100% height=100%}
 
 <sub><sup>The small mention of Civis Analytics = me! Source: New York Times</sup></sub>
 
