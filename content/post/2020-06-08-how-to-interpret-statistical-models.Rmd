@@ -16,7 +16,7 @@ With the recent Covid-19 pandemic, there has been a proliferation of epidemiolog
 
 The full article is linked above, but here is a concise checklist (taken from the post) of things to consider when trying to understand reporting about statistical models:
 
-> A good model should meet all of the criteria below. A negative answer on one isn’t fatal, but a model that fails on multiple counts warrants extra skepticism.*
+> A good model should meet all of the criteria below. A negative answer on one isn’t fatal, but a model that fails on multiple counts warrants extra skepticism.
 >
 > 1. Is the model’s methodology clear? Even if the details are too technical to fully grasp, there should be a clear description of how the data is used to generate projections.
 >
