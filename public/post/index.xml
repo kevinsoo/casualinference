@@ -6,10 +6,20 @@
     <description>Recent content in Posts on Casual Inference</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 08 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 16 Sep 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Coronavirus and the 2020 census</title>
+      <link>/2020/09/16/coronavirus-and-the-2020-census/</link>
+      <pubDate>Wed, 16 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/09/16/coronavirus-and-the-2020-census/</guid>
+      <description>It’s been awhile since I posted anything, which has been due to my being stretched thin at my job (on top of trying to survive a pandemic). I’ve been working with the National Conference on Citizenship (NCoC) to monitor the progress of the census, which determines how federal funding and congressional seats are apportioned to the different states.
+In the best of times, the census is a challenging logistical operation to execute well.</description>
+    </item>
     
     <item>
       <title>How to interpret statistical models</title>
