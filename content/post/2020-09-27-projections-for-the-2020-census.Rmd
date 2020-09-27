@@ -1,0 +1,23 @@
+---
+title: Projections for the 2020 census
+author: Kevin Soo
+date: '2020-09-27'
+slug: projections-for-the-2020-census
+categories:
+  - General
+tags:
+  - census
+  - public
+---
+
+More of my work on Census 2020 got mentioned in the [Washington Post](https://www.washingtonpost.com/local/social-issues/census-count-hurricanes-fires/2020/09/21/b1075d64-f963-11ea-be57-d00bb9bc632d_story.html)! The article is about how the current wildfires and hurricanes affecting some states will affect the ability of enumerators to carry out non-response follow-up (NRFU). This compounds the threat imposed by the Trump administration cutting short the window for NRFU. The window is supposed to end September 30 (but there is [a lawsuit going back-and-forth](https://www.npr.org/2020/09/24/912071784/court-orders-census-counting-to-continue-through-oct-31-appeal-expected) in the courts). 
+
+I used a simple method to project each state's enumeration rate out to September 30, not to generate point estimates, but to estimate the rate "if things went on at the current rate". To do this, I take an exponential average[^1] of each day's change in enumeration from the last week, and linearly extrapolate the current enumeration rate out to the end of NRFU by that amount each day. This really implies a "best-case scenario" because NRFU slows down as more housing units get enumerated, leaving the most hard-to-count households left.
+
+Given data up to September 25, there are 13 states that are projected to not reach the Census Bureau's self-proclaimed 99% enumeration rate.
+
+![](/post/2020-09-27-projections-for-the-2020-census_files/CensusProjections_09-26.png){width=100% height=100%}
+
+<sub><sup>Source: Enumeration data from the [Census Bureau](https://2020census.gov/en/response-rates/nrfu.html).</sup></sub>
+
+[^1]: An [exponential moving average](https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average) applies decreasing weights to observations further back in time so that more recent changes are weighted more heavily when computing the average.

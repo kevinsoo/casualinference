@@ -1,0 +1,25 @@
+---
+title: Projections for the 2020 census
+author: Kevin Soo
+date: '2020-09-27'
+slug: projections-for-the-2020-census
+categories:
+  - General
+tags:
+  - census
+  - public
+---
+
+
+
+<p>More of my work on Census 2020 got mentioned in the <a href="https://www.washingtonpost.com/local/social-issues/census-count-hurricanes-fires/2020/09/21/b1075d64-f963-11ea-be57-d00bb9bc632d_story.html">Washington Post</a>! The article is about how the current wildfires and hurricanes affecting some states will affect the ability of enumerators to carry out non-response follow-up (NRFU). This compounds the threat imposed by the Trump administration cutting short the window for NRFU. The window is supposed to end September 30 (but there is <a href="https://www.npr.org/2020/09/24/912071784/court-orders-census-counting-to-continue-through-oct-31-appeal-expected">a lawsuit going back-and-forth</a> in the courts).</p>
+<p>I used a simple method to project each state’s enumeration rate out to September 30, not to generate point estimates, but to estimate the rate “if things went on at the current rate”. To do this, I take an exponential average<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> of each day’s change in enumeration from the last week, and linearly extrapolate the current enumeration rate out to the end of NRFU by that amount each day. This really implies a “best-case scenario” because NRFU slows down as more housing units get enumerated, leaving the most hard-to-count households left.</p>
+<p>Given data up to September 25, there are 13 states that are projected to not reach the Census Bureau’s self-proclaimed 99% enumeration rate.</p>
+<p><img src="/post/2020-09-27-projections-for-the-2020-census_files/CensusProjections_09-26.png" style="width:100.0%;height:100.0%" /></p>
+<p><sub><sup>Source: Enumeration data from the <a href="https://2020census.gov/en/response-rates/nrfu.html">Census Bureau</a>.</sup></sub></p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>An <a href="https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average">exponential moving average</a> applies decreasing weights to observations further back in time so that more recent changes are weighted more heavily when computing the average.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</div>

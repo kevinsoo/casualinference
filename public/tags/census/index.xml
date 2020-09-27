@@ -6,10 +6,19 @@
     <description>Recent content in Census on Casual Inference</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Sep 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 27 Sep 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/census/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Projections for the 2020 census</title>
+      <link>/2020/09/27/projections-for-the-2020-census/</link>
+      <pubDate>Sun, 27 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/09/27/projections-for-the-2020-census/</guid>
+      <description>More of my work on Census 2020 got mentioned in the Washington Post! The article is about how the current wildfires and hurricanes affecting some states will affect the ability of enumerators to carry out non-response follow-up (NRFU). This compounds the threat imposed by the Trump administration cutting short the window for NRFU. The window is supposed to end September 30 (but there is a lawsuit going back-and-forth in the courts).</description>
+    </item>
     
     <item>
       <title>Coronavirus and the 2020 census</title>
