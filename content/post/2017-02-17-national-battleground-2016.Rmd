@@ -8,10 +8,11 @@ Categories:
 tags:
   - politics
 Description: ''
+runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 
 # load libraries
 library(shiny)
@@ -23,6 +24,7 @@ library(scales)
 library(ggthemes)
 library(gganimate)
 library(cowplot)
+library(geosphere)
 
 # load maps
 load("files/national-battleground-2016/map2016.Rda") # counties
@@ -38,11 +40,11 @@ In the interactive map below, you can view each county's result, or the average 
 
 <iframe id="map" src="https://kevinsoo.shinyapps.io/americannations/" width="1100" height="500" style="border:0"></iframe>
 
-Let's play a game. Imagine that we put all those counties in a bucket. **If I randomly drew one county from the bucket, would you guess that county voted for Trump or Clinton? (And relatedly, could you estimate the margin of victory?)** What if you had some information about the county (e.g., that it's in Pennsylvania)? Would that information affect your guess or estimate? In the following analyses, I'll look at several variables that are relevant for guessing how a particular county voted.
+Let's play a game. Imagine that we put all those counties in a bucket. *If I randomly drew one county from the bucket, would you guess that county voted for Trump or Clinton? (And relatedly, could you estimate the margin of victory?)* What if you had some information about the county (e.g., that it's in Pennsylvania)? Would that information affect your guess or estimate? In the following analyses, I'll look at several variables that are relevant for guessing how a particular county voted.
 
 ## Guessing (mostly) blind
 
-**How would a naïve person guess the winner of a particular county? In the absence of any information about the county, the best we can do is guess the winner was the candidate who won more counties.** The left panel of the following figure displays how many counties each candidate won -- Trump won way more counties than Clinton did!
+*How would a naïve person guess the winner of a particular county? In the absence of any information about the county, the best we can do is guess the winner was the candidate who won more counties.* The left panel of the following figure displays how many counties each candidate won -- Trump won way more counties than Clinton did!
 
 The right panel of the figure plots the victory margins for the winning candidate in all counties. The mean victory margin is 31.99% in favor of Trump. Since the distribution is positively skewed, the median victory margin of 38.24% for Trump may be a better measure of the "prototypical" county.
 
@@ -79,7 +81,7 @@ Some [good](https://www.nytimes.com/interactive/2016/11/16/us/politics/the-two-a
 
 Urbanicity is a [multifaceted construct](https://bmcpublichealth.biomedcentral.com/articles/10.1186/1471-2458-12-530), but we do know the number of people who voted in each county. This isn't a perfect measure -- higher voting rates could reflect demographic and geographic differences in voter enthusiasm -- but on average, more urban counties tend to be more densely populated and will therefore have more voters.
 
-**If I told you the number of voters in a given county, how well could you guess whether it voted for Clinton or Trump?** The following figure plots the relationship between total voters and victory margins in all counties. 
+*If I told you the number of voters in a given county, how well could you guess whether it voted for Clinton or Trump?* The following figure plots the relationship between total voters and victory margins in all counties. 
 
 ```{r size, echo=FALSE, warning=FALSE, message=FALSE, fig.align="center"}
 county2016$Label <- ifelse(county2016$Total_2016>1050000, as.character(county2016$County), NA)
@@ -101,11 +103,11 @@ ggplot(data=county2016) +
 
 The counties that Clinton won tended to be much bigger (contributing to her popular vote victory margin, but perhaps not doing much for her electoral votes if the county is in a state that's primarily supporting her already). Of the five counties with the most voters, four voted for Clinton (only Maricopa in Arizona voted for Trump).
 
-I fit a log function to the plot (which fit better than a simple linear function -- a log function also makes sense because there's a natural ceiling to the vote-margin of each county) and found that county size explains 25.38% of the variance in victory margins. If there are at least 100,000 voters in a county (there are 284 such counties), the odds of that county voting for Clinton over Trump = 1.6, meaning the county is 1.6 times likelier to vote for Clinton than Trump. If there are at least 200,000 voters (there are 142 such counties), the odds are 3.3 in favor of Clinton. **Thus, if I told you the size of a randomly drawn county, you could update your guess about who won it pretty well.**
+I fit a log function to the plot (which fit better than a simple linear function -- a log function also makes sense because there's a natural ceiling to the vote-margin of each county) and found that county size explains 25.38% of the variance in victory margins. If there are at least 100,000 voters in a county (there are 284 such counties), the odds of that county voting for Clinton over Trump = 1.6, meaning the county is 1.6 times likelier to vote for Clinton than Trump. If there are at least 200,000 voters (there are 142 such counties), the odds are 3.3 in favor of Clinton. *Thus, if I told you the size of a randomly drawn county, you could update your guess about who won it pretty well.*
 
 ## These United States
 
-**What if I drew a random county and told you the state it was from? Since some states leaned heavily towards a particular candidate, knowing the state should allow you to guess the outcome in that county.** For example, Wyoming's state-wide margin was 47.56% in favor of Trump, and only one of its 23 counties voted for Clinton. So if the county I drew came from Wyoming, you should bet money that it voted for Trump.
+*What if I drew a random county and told you the state it was from? Since some states leaned heavily towards a particular candidate, knowing the state should allow you to guess the outcome in that county.* For example, Wyoming's state-wide margin was 47.56% in favor of Trump, and only one of its 23 counties voted for Clinton. So if the county I drew came from Wyoming, you should bet money that it voted for Trump.
 
 How diverse are voting patterns within each state? The following graph plots the distribution of county-level victory margins within each state. The states are ordered by State-wide margins from the most Trump-leaning (Wyoming) to the most Clinton-leaning (Washington DC, though it's not a state).
 
