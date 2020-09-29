@@ -17,18 +17,18 @@ categories: R
 <h2>Exploring the scripts</h2>
 <p>Recently the <code>schrute</code> package was released, containing scripts of every episode of The Office. I decided to dig into the text. I started by cleaning up the data a little, producing the following data frame. In the following analyses, I explore some patterns in the data that might (or might not) comport with the average viewer’s memory or perception of the show.</p>
 <pre><code>## # A tibble: 55,130 x 3
-##    speech character text                                                   
-##     &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;                                                  
-##  1      1 Michael   All right Jim. Your quarterlies look very good. How ar…
-##  2      2 Jim       Oh, I told you. I couldn&#39;t close it. So...             
-##  3      3 Michael   So you&#39;ve come to the master for guidance? Is this wha…
-##  4      4 Jim       Actually, you called me in here, but yeah.             
-##  5      5 Michael   All right. Well, let me show you how it&#39;s done.        
-##  6      6 Michael   So that&#39;s the way it&#39;s done.                           
-##  7      7 Michael   I&#39;ve, uh, I&#39;ve been at Dunder Mifflin for 12 years, th…
-##  8      8 Pam       Well. I don&#39;t know.                                    
-##  9      9 Michael   &quot;If you think she&#39;s cute now, you should have seen her…
-## 10     10 Pam       What?                                                  
+##    speech character text                                                        
+##     &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;                                                       
+##  1      1 Michael   All right Jim. Your quarterlies look very good. How are thi…
+##  2      2 Jim       Oh, I told you. I couldn&#39;t close it. So...                  
+##  3      3 Michael   So you&#39;ve come to the master for guidance? Is this what you…
+##  4      4 Jim       Actually, you called me in here, but yeah.                  
+##  5      5 Michael   All right. Well, let me show you how it&#39;s done.             
+##  6      6 Michael   Yes, I&#39;d like to speak to your office manager, please. Yes,…
+##  7      7 Michael   I&#39;ve, uh, I&#39;ve been at Dunder Mifflin for 12 years, the las…
+##  8      8 Pam       Well. I don&#39;t know.                                         
+##  9      9 Michael   If you think she&#39;s cute now, you should have seen her a cou…
+## 10     10 Pam       What?                                                       
 ## # … with 55,120 more rows</code></pre>
 </div>
 <div id="speaking-time" class="section level2">
@@ -146,7 +146,8 @@ tmp &lt;- df %&gt;%
     filter(character %in% chars) %&gt;% 
     unnest_tokens(word, text) %&gt;% 
     anti_join(stop_words, by = &quot;word&quot;) %&gt;% 
-    inner_join(get_sentiments(&quot;afinn&quot;))
+    inner_join(get_sentiments(&quot;afinn&quot;)) %&gt;% 
+    rename(score = value)
 
 # Plot words by sentiment
 tmp %&gt;% 
@@ -186,6 +187,7 @@ tmp &lt;- tmp %&gt;%
 # Get sentiment towards referents
 sentiment &lt;- tmp %&gt;%
     inner_join(get_sentiments(&quot;afinn&quot;)) %&gt;% 
+    rename(score = value) %&gt;% 
     filter(character %in% chars) %&gt;% 
     group_by(id, season, episode, text, character, referent) %&gt;% 
     summarise(sentiment = sum(score))
@@ -210,8 +212,7 @@ sentiment %&gt;%
     labs(x = &quot;Referent&quot;, y = &quot;Speaker&quot;,
          color = &quot;Average\nsentiment&quot;, size = &quot;Utterances&quot;,
          title = &quot;Feelings for Office co-workers&quot;,
-         caption = &quot;Note: Speaker-referent\npairs 
-         with ≥ 10 utterances&quot;,
+         caption = &quot;Note: Speaker-referent\npairs with ≥ 10 utterances&quot;,
          subtitle = &quot;Average sentiment of utterances about others&quot;)</code></pre>
 <p><img src="/post/2020-02-05-revisiting-the-office-a-text-analysis_files/figure-html/sentimentchars-1.png" width="672" /></p>
 <p>From this, most characters seem to have pretty average speech when referring to other characters, although from my knowledge of the show, this is probably because characters alternate between saying positive and negative things towards others (rather than consistently using neutral words). The main points of interest are speaker-referent combinations with exceptionally positive speech (e.g. Ryan to Jim, Michael to Kelly, Andy to Kevin), which reminds me that a weakness of this kind of simple sentiment analysis is that it doesn’t detect sarcasm. Speaker-referent pairs with extremely negative speech make more apparent sense to viewers: Dwight to Kelly, Oscar to Angela, and of course, Michael to Toby.</p>
@@ -240,7 +241,7 @@ sentiment %&gt;%
 <hr />
 <ol>
 <li id="fn1"><p>It’s pretty widely acknowledged that the show’s quality declined over time, and I do find later seasons (without Michael) to be kind of a slog. But one indicator of this I’ve realized in rewatching The Office is that most of the most quotable lines are heavily concentrated in the first couple of seasons! The writers peaked early with the memorable dialogue.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Since only a few character-referent combinations had a high number of mentions, I visualized <span class="math inline">\(log(mentions)\)</span>, to allow greater discriminability between values in the lower end of the scale.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Since only a few character-referent combinations had a high number of mentions, I visualized <em>log(mentions)</em>, to allow greater discriminability between values in the lower end of the scale.<a href="#fnref2" class="footnote-back">↩</a></p></li>
 <li id="fn3"><p>The majority of each character’s words are not contained in the corpus, and can be considered “neutral” (a rating of zero).<a href="#fnref3" class="footnote-back">↩</a></p></li>
 </ol>
 </div>

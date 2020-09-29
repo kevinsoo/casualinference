@@ -20,6 +20,7 @@ library(tidytext)
 library(widyr)
 library(ggridges)
 library(DT)
+library(textdata)
 
 # Load data
 data(theoffice)
@@ -173,7 +174,8 @@ tmp <- df %>%
     filter(character %in% chars) %>% 
     unnest_tokens(word, text) %>% 
     anti_join(stop_words, by = "word") %>% 
-    inner_join(get_sentiments("afinn"))
+    inner_join(get_sentiments("afinn")) %>% 
+    rename(score = value)
 
 # Plot words by sentiment
 tmp %>% 
@@ -217,6 +219,7 @@ tmp <- tmp %>%
 # Get sentiment towards referents
 sentiment <- tmp %>%
     inner_join(get_sentiments("afinn")) %>% 
+    rename(score = value) %>% 
     filter(character %in% chars) %>% 
     group_by(id, season, episode, text, character, referent) %>% 
     summarise(sentiment = sum(score))
@@ -241,8 +244,7 @@ sentiment %>%
     labs(x = "Referent", y = "Speaker",
          color = "Average\nsentiment", size = "Utterances",
          title = "Feelings for Office co-workers",
-         caption = "Note: Speaker-referent\npairs 
-         with ≥ 10 utterances",
+         caption = "Note: Speaker-referent\npairs with ≥ 10 utterances",
          subtitle = "Average sentiment of utterances about others")
 ```
 
@@ -274,5 +276,5 @@ sentiment %>%
 Note who is at the bottom. Oh Toby, why are you the way that you are?
 
 [^1]: It's pretty widely acknowledged that the show's quality declined over time, and I do find later seasons (without Michael) to be kind of a slog. But one indicator of this I've realized in rewatching The Office is that most of the most quotable lines are heavily concentrated in the first couple of seasons! The writers peaked early with the memorable dialogue.
-[^2]: Since only a few character-referent combinations had a high number of mentions, I visualized $log(mentions)$, to allow greater discriminability between values in the lower end of the scale.
+[^2]: Since only a few character-referent combinations had a high number of mentions, I visualized *log(mentions)*, to allow greater discriminability between values in the lower end of the scale.
 [^3]: The majority of each character's words are not contained in the corpus, and can be considered "neutral" (a rating of zero).
