@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.54.0" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Bayesian birders &middot; Casual Inference</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  
+  <link rel="icons8-scatter-plot-90" sizes="144x144" href="/icons8-scatter-plot-90.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Casual Inference" />
+
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>Casual Inference</h1></a>
+      <p class="lead">
+      Adventures of a Data Scientist <a href="http://twitter.com/civisanalytics">@CivisAnalytics</a><br>Occasional causal inferences
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        
+        <li><a href="/about/"> About </a></li><li><a href="/post/"> Posts </a></li><li><a href="/categories/"> Categories </a></li><li><a href="/tags/"> Tags </a></li>
+      </ul>
+    </nav>
+    
+    <div>
+        <h3 class="white">Links</h3>
+        <i class="fab fa-twitter fa-fw"></i> <a href="http://twitter.com/kevinwxsoo">Twitter</a><br>
+        <i class="fab fa-github fa-fw"></i> <a href="https://github.com/kevinsoo">GitHub</a><br>
+        <i class="far fa-envelope fa-fw"></i> <a href="mailto:kevinwxsoo@gmail.com?Subject=Hello">Email</a><br>
+        <br>
+    </div>
+
+    <p>&copy; 2021. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Bayesian birders</h1>
+  <time datetime=2021-06-07T00:00:00Z class="post-date">Mon, Jun 7, 2021</time>
+  <p>After spending so much time in front of screens for most of 2020, I’ve tried to make space for more screenless activities that were pandemic-compatible. Evelyn and I got into birding late last year, and have been doing it pretty actively for most of 2021. We’ve been keeping track of our birding adventures on Instagram @<a href="https://www.instagram.com/ourbigyear/">OurBigYear</a>.<sup class="footnote-ref" id="fnref:1"><a href="#fn:1">1</a></sup> Besides the physical and mental health benefits of birding, it’s also an activity that suits data scientists.</p>
+
+<p>Bird identification is basically reasoning using Bayesian statistics. Birders aren’t explicitly performing probabilistic computations when watching for birds, but everyone possesses intuitive cognitive abilities that approximate such computations.<sup class="footnote-ref" id="fnref:2"><a href="#fn:2">2</a></sup></p>
+
+<p>When birding, birders first consider the distributions of bird species over geographical regions and habitats, which change depending on the time of day and year. A birder might not know the precise distributions, but they usually have a sense that at this time of the year in their part of the world, it is likelier to encounter a <a href="https://www.allaboutbirds.org/guide/Northern_Cardinal/overview">Northern Cardinal</a> than an <a href="https://www.allaboutbirds.org/guide/Eastern_Bluebird/overview">Eastern Bluebird</a>, i.e. <em>P</em>(Northern Cardinal) &gt; <em>P</em>(Eastern Bluebird). These are referred to as <em>priors</em>: The prior knowledge you have before identifying any particular specimen.</p>
+
+<p>When a birder catches a partial glimpse of a bird (or hears its call), they consider the likelihood that it was a particular species given the evidence they saw (or heard). If they see a flash of red, they know it is likelier to belong to a Northern Cardinal than to any other species in the area, i.e. <em>P</em>(Red plumage|Northern Cardinal) is really high. This is referred to as the <em>likelihood</em> or fit of a species to the observed evidence.</p>
+
+<p>Using <a href="https://en.wikipedia.org/wiki/Bayes%27_theorem">Bayes’ theorem</a>, a birder can use the likelihood of a feature belonging to a particular species to update their prior probability of seeing that particular bird, resulting in a <em>posterior probability</em> – <em>P</em>(Northern Cardinal|Red plumage) – the probability the bird they saw was of a particular species given the evidence. The posterior probability quantifies their confidence that the specimen they saw is of a particular species, given the evidence they observed. If Northern Cardinals are the only common species with red plumage in the area, seeing a flash of red is going to lead to <em>P</em>(Northern Cardinal|Red plumage) pretty close to 1 (i.e. they will be practically certain of what they saw).</p>
+
+<p>In reality, birding is both more and less complicated than this. It’s more complicated because birds can veer beyond their expected distributions, because we are sometimes mistaken about what we&rsquo;ve seen or heard, and because some evidence is common to multiple species of bird (e.g., if there are multiple species with red plumage in the area, seeing red plumage won’t be as helpful in identifying the species you saw). On the other hand, birding is also easier because we almost always observe multiple features simultaneously while birding that help us with identification (e.g. plumage color <em>and</em> size <em>and</em> behavior), and because our minds are adept and practiced at carrying out these types of computations with minimal effort.</p>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">A &ldquo;<a href="https://en.wikipedia.org/wiki/Big_year">Big Year</a>&rdquo; is a challenge birders take on to identify as many species as they can in a calendar year). The <a href="https://www.audubon.org/news/two-guys-just-broke-north-american-big-year-record-how">top North American birders</a> see upwards of 700-800 species, so I hesitate to say what we’re doing counts as a Big Year. As of this post, we’re at 129 species for the year.
+ <a class="footnote-return" href="#fnref:1"><sup>[return]</sup></a></li>
+<li id="fn:2">The general domain of my research in graduate school was how people used intuitive mental heuristics to approximate more sophisticated probabilistic computations.
+ <a class="footnote-return" href="#fnref:2"><sup>[return]</sup></a></li>
+</ol>
+</div>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>
