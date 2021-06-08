@@ -10,7 +10,7 @@ tags:
   - outdoors
 ---
 
-After spending too much time in front of screens for most of 2020, I’ve tried to make space for more screenless activities that were pandemic-compatible. Evelyn and I got into birding late last year, and have been doing it pretty actively for most of 2021. We’ve been keeping track of our birding adventures on Instagram @[OurBigYear](https://www.instagram.com/ourbigyear/).[^1] Besides the physical and mental health benefits of birding, it’s also an activity that suits data scientists.
+After spending too much time in front of screens for most of 2020, I’ve tried to make space for more screenless activities that are pandemic-compatible. Evelyn and I got into birding late last year, and have been doing it pretty actively for most of 2021. We’ve been keeping track of our birding adventures on Instagram @[OurBigYear](https://www.instagram.com/ourbigyear/).[^1] Besides the physical and mental health benefits of birding, it’s also an activity that suits data scientists.
 
 Bird identification is basically reasoning using Bayesian statistics. Birders aren’t explicitly performing probabilistic computations when watching for birds, but everyone possesses intuitive cognitive abilities that approximate such computations.[^2]
 
