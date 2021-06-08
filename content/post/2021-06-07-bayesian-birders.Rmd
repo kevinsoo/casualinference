@@ -12,7 +12,7 @@ tags:
 
 After spending too much time in front of screens for most of 2020, I’ve tried to make space for more screenless activities that are pandemic-compatible. Evelyn and I got into birding late last year, and have been doing it pretty actively for most of 2021. We’ve been keeping track of our birding adventures on Instagram @[OurBigYear](https://www.instagram.com/ourbigyear/).[^1] Besides the physical and mental health benefits of birding, it’s also an activity that suits data scientists.
 
-Bird identification is basically reasoning using Bayesian statistics. Birders aren’t explicitly performing probabilistic computations when watching for birds, but everyone possesses intuitive cognitive abilities that approximate such computations.[^2]
+Bird identification is essentially reasoning using Bayesian statistics. Birders aren’t explicitly performing probabilistic computations when watching for birds, but everyone possesses intuitive cognitive abilities that approximate such computations.[^2]
 
 When birding, birders first consider the distributions of bird species over geographical regions and habitats, which change depending on the time of day and year. A birder might not know the precise distributions, but they usually have a sense that at this time of the year in their part of the world, it is likelier to encounter a [Northern Cardinal](https://www.allaboutbirds.org/guide/Northern_Cardinal/overview) than an [Eastern Bluebird](https://www.allaboutbirds.org/guide/Eastern_Bluebird/overview), i.e. *P*(Northern Cardinal) > *P*(Eastern Bluebird). These are referred to as *priors*: The prior knowledge you have before identifying any particular specimen.
 
